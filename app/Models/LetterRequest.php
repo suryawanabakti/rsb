@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
+use App\Models\Patient;
+use App\Models\LetterType;
+use App\Models\RequestFile;
 
 class LetterRequest extends Model
 {
@@ -31,5 +35,10 @@ class LetterRequest extends Model
     public function files()
     {
         return $this->hasMany(RequestFile::class);
+    }
+
+    public function processor()
+    {
+        return $this->belongsTo(User::class, 'processed_by');
     }
 }
