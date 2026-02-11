@@ -16,7 +16,7 @@ class   PatientSeeder extends Seeder
         $patients = [
             [
                 'user' => [
-                    'name' => 'Budi Santoso',
+                    'name' => 'Budi Santosos',
                     'username' => 'budi80',
                     'password' => 'password123',
                     'phone' => '081234567890',
