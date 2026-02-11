@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Surat Bhayangkara</title>
+    <title>Admin Login - RS. Bhayangkara Makassar</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-gray-50 flex items-center justify-center min-h-screen">
     <div class="max-w-md w-full p-6">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-extrabold text-blue-900">Admin Panel</h1>
-            <p class="text-gray-600 mt-2">Silakan masuk untuk mengelola sistem</p>
+        <div class="text-center mb-8 flex flex-col items-center">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-24 h-24 mb-4">
+            <h1 class="text-2xl font-extrabold text-blue-900 leading-tight">RS. BHAYANGKARA<br><span
+                    class="text-lg">MAKASSAR</span></h1>
+            <p class="text-gray-600 mt-2">Sistem Administrasi Surat</p>
         </div>
 
         <div class="bg-white rounded-2xl shadow-xl p-8">
             <form action="{{ route('admin.login.submit') }}" method="POST">
                 @csrf
-                
+
                 @if ($errors->any())
                     <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-xl text-sm border border-red-100 italic">
                         {{ $errors->first() }}
@@ -53,4 +61,5 @@
         </p>
     </div>
 </body>
+
 </html>

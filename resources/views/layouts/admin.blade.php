@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Dashboard') - Surat Bhayangkara</title>
+    <title>@yield('title', 'Admin') - RS. Bhayangkara Makassar</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
@@ -24,9 +25,13 @@
     <!-- Sidebar -->
     <div class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 transition-transform duration-300 transform"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
-        <div class="flex items-center justify-between h-16 px-6 bg-slate-800 text-white font-bold text-xl">
-            <span>Admin Panel</span>
-            <button @click="sidebarOpen = false" class="lg:hidden text-white">&times;</button>
+        <div class="flex items-center space-x-3 h-20 px-6 bg-slate-800 border-b border-slate-700">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-10 h-10">
+            <div class="overflow-hidden">
+                <p class="text-white font-black text-sm leading-tight truncate">RS. BHAYANGKARA</p>
+                <p class="text-blue-400 font-bold text-[10px] tracking-tight truncate uppercase">MAKASSAR</p>
+            </div>
+            <button @click="sidebarOpen = false" class="lg:hidden text-white ml-auto">&times;</button>
         </div>
         <nav class="mt-6 px-4 space-y-2">
             <a href="{{ route('admin.dashboard') }}"
