@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\RegisterRequest;
+use App\Http\Requests\Api\UpdateProfileRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -52,6 +53,16 @@ class AuthController extends Controller
     {
         return response()->json([
             'data' => $request->user()->load('patient')
+        ]);
+    }
+
+    public function updateProfile(UpdateProfileRequest $request): JsonResponse
+    {
+        $user = $this->authService->updateProfile($request->user(), $request->validated());
+
+        return response()->json([
+            'message' => 'Profil berhasil diperbarui',
+            'data' => $user
         ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class AuthService
@@ -51,5 +52,32 @@ class AuthService
             'user' => $user->load('patient'),
             'token' => $token,
         ];
+    }
+
+    public function updateProfile(User $user, array $data): User
+    {
+        return DB::transaction(function () use ($user, $data) {
+            $userData = [
+                'name' => $data['name'],
+                'phone' => $data['phone'] ?? $user->phone,
+            ];
+
+            if (!empty($data['password'])) {
+                $userData['password'] = $data['password'];
+            }
+
+            $user->update($userData);
+
+            if ($user->patient) {
+                $user->patient->update([
+                    'nik' => $data['nik'],
+                    'address' => $data['address'],
+                    'birth_date' => $data['birth_date'],
+                    'gender' => $data['gender'],
+                ]);
+            }
+
+            return $user->load('patient');
+        });
     }
 }
