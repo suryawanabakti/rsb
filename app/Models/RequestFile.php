@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class RequestFile extends Model
+{
+    protected $fillable = [
+        'letter_request_id',
+        'file_name',
+        'file_path',
+        'mime_type',
+        'file_size',
+        'uploaded_at',
+    ];
+}
