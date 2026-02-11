@@ -44,4 +44,12 @@ class LetterRequestService
             ->latest()
             ->paginate(15);
     }
+
+    public function getRequestDetails(int $id, int $patientId): ?LetterRequest
+    {
+        return LetterRequest::where('id', $id)
+            ->where('patient_id', $patientId)
+            ->with(['letterType', 'files', 'processor'])
+            ->first();
+    }
 }

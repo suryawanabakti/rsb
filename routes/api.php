@@ -20,5 +20,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [LetterRequestController::class, 'index']);
         Route::post('/', [LetterRequestController::class, 'store']);
         Route::get('/types', [LetterRequestController::class, 'types']);
+        Route::get('/{id}', [LetterRequestController::class, 'show']);
     });
 });

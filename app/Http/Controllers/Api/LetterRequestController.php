@@ -46,6 +46,25 @@ class LetterRequestController extends Controller
         ], 201);
     }
 
+    public function show(Request $request, int $id): JsonResponse
+    {
+        $patient = $request->user()->patient;
+
+        if (!$patient) {
+            return response()->json(['message' => 'Data pasien tidak ditemukan'], 404);
+        }
+
+        $letterRequest = $this->letterRequestService->getRequestDetails($id, $patient->id);
+
+        if (!$letterRequest) {
+            return response()->json(['message' => 'Permohonan tidak ditemukan'], 404);
+        }
+
+        return response()->json([
+            'data' => $letterRequest
+        ]);
+    }
+
     public function types(): JsonResponse
     {
         $types = LetterType::where('is_active', true)->get();
