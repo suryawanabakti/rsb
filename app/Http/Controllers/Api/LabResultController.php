@@ -70,6 +70,13 @@ class LabResultController extends Controller
             'inputted_by' => $request->user()->id,
         ]);
 
+        // Notify patient
+        $labResult->patient->user->notify(new \App\Notifications\LabResultStatusUpdated($labResult, 'created'));
+
+        // Notify all doctors
+        $doctors = \App\Models\User::where('role', 'dokter')->get();
+        \Illuminate\Support\Facades\Notification::send($doctors, new \App\Notifications\NewLabResultAdded($labResult));
+
         return response()->json([
             'message' => 'Hasil pemeriksaan berhasil disimpan',
             'data' => $labResult->load(['patient.user', 'inputter']),
@@ -121,6 +128,9 @@ class LabResultController extends Controller
             'validated_by' => $request->user()->id,
             'validated_at' => now(),
         ]);
+
+        // Notify patient
+        $labResult->patient->user->notify(new \App\Notifications\LabResultStatusUpdated($labResult, 'validated'));
 
         return response()->json([
             'message' => 'Hasil pemeriksaan berhasil divalidasi',

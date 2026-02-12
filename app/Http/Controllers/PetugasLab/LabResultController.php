@@ -39,7 +39,7 @@ class LabResultController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        LabResult::create([
+        $labResult = LabResult::create([
             'patient_id' => $validated['patient_id'],
             'test_name' => $validated['test_name'],
             'test_date' => $validated['test_date'],
@@ -48,6 +48,13 @@ class LabResultController extends Controller
             'status' => 'pending',
             'inputted_by' => Auth::id(),
         ]);
+
+        // Notify patient
+        $labResult->patient->user->notify(new \App\Notifications\LabResultStatusUpdated($labResult, 'created'));
+
+        // Notify all doctors
+        $doctors = \App\Models\User::where('role', 'dokter')->get();
+        \Illuminate\Support\Facades\Notification::send($doctors, new \App\Notifications\NewLabResultAdded($labResult));
 
         return redirect()->route('petugas-lab.lab-results.index')
             ->with('success', 'Hasil pemeriksaan berhasil disimpan.');

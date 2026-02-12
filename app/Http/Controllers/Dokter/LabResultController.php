@@ -42,6 +42,9 @@ class LabResultController extends Controller
             'validated_at' => now(),
         ]);
 
+        // Notify patient
+        $result->patient->user->notify(new \App\Notifications\LabResultStatusUpdated($result, 'validated'));
+
         return redirect()->route('dokter.lab-results.index')
             ->with('success', 'Hasil pemeriksaan berhasil divalidasi.');
     }

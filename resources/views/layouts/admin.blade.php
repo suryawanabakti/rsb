@@ -112,14 +112,74 @@
             <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-slate-900 transition-colors">
                 <span class="text-2xl">☰</span>
             </button>
-            <div class="flex items-center space-x-4">
-                <div class="text-right">
-                    <p class="text-sm font-bold text-slate-900">{{ Auth::user()->name }}</p>
-                    <p class="text-xs text-slate-500">{{ Auth::user()->role }}</p>
+            <div class="flex items-center space-x-6">
+                <!-- Notifications -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open"
+                        class="relative p-2 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none">
+                        <span class="text-xl">🔔</span>
+                        @if (Auth::user()->unreadNotifications->count() > 0)
+                            <span
+                                class="absolute top-0 right-0 h-4 w-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                                {{ Auth::user()->unreadNotifications->count() }}
+                            </span>
+                        @endif
+                    </button>
+
+                    <div x-show="open" @click.away="open = false" x-cloak
+                        class="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50">
+                        <div class="p-4 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+                            <h3 class="font-bold text-slate-900 text-sm">Notifikasi</h3>
+                        </div>
+                        <div class="max-h-96 overflow-y-auto">
+                            @forelse(Auth::user()->unreadNotifications as $notification)
+                                <div
+                                    class="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors relative group">
+                                    @php
+                                        $url = '#';
+                                        if (isset($notification->data['lab_result_id'])) {
+                                            $role = Auth::user()->role;
+                                            $url = route(
+                                                $role . '.lab-results.show',
+                                                $notification->data['lab_result_id'],
+                                            );
+                                        } elseif (isset($notification->data['letter_request_id'])) {
+                                            $url = route(
+                                                'admin.letter-requests.show',
+                                                $notification->data['letter_request_id'],
+                                            );
+                                        }
+                                    @endphp
+                                    <a href="{{ $url }}" class="text-left w-full block">
+                                        <p class="text-xs font-bold text-slate-900 mb-1">
+                                            {{ $notification->data['test_name'] ?? ($notification->data['letter_type_name'] ?? 'Update Sistem') }}
+                                        </p>
+                                        <p class="text-xs text-slate-500 leading-relaxed">
+                                            {{ $notification->data['message'] }}</p>
+                                        <p class="text-[10px] text-slate-400 mt-2 font-medium">
+                                            {{ $notification->created_at->diffForHumans() }}</p>
+                                    </a>
+                                    <div class="absolute top-4 right-4 h-2 w-2 bg-blue-500 rounded-full"></div>
+                                </div>
+                            @empty
+                                <div class="p-8 text-center">
+                                    <span class="text-3xl mb-2 block">📭</span>
+                                    <p class="text-xs text-slate-400 italic">Tidak ada notifikasi baru</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
                 </div>
-                <div
-                    class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-white shadow-sm">
-                    {{ substr(Auth::user()->name, 0, 1) }}
+
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <p class="text-sm font-bold text-slate-900">{{ Auth::user()->name }}</p>
+                        <p class="text-xs text-slate-500 uppercase">{{ str_replace('_', ' ', Auth::user()->role) }}</p>
+                    </div>
+                    <div
+                        class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-white shadow-sm">
+                        {{ substr(Auth::user()->name, 0, 1) }}
+                    </div>
                 </div>
             </div>
         </header>
