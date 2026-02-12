@@ -34,22 +34,52 @@
             <button @click="sidebarOpen = false" class="lg:hidden text-white ml-auto">&times;</button>
         </div>
         <nav class="mt-6 px-4 space-y-2">
-            <a href="{{ route('admin.dashboard') }}"
-                class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                <span class="mr-3">📊</span> Dashboard
-            </a>
-            <a href="{{ route('admin.letter-requests.index') }}"
-                class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.letter-requests.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                <span class="mr-3">✉️</span> Permohonan Surat
-            </a>
-            <a href="{{ route('admin.letter-types.index') }}"
-                class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.letter-types.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                <span class="mr-3">📋</span> Jenis Surat
-            </a>
-            <a href="{{ route('admin.patients.index') }}"
-                class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.patients.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                <span class="mr-3">👥</span> Data Pasien
-            </a>
+            @php $role = Auth::user()->role; @endphp
+
+            @if ($role === 'admin')
+                <a href="{{ route('admin.dashboard') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">📊</span> Dashboard
+                </a>
+                <a href="{{ route('admin.letter-requests.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.letter-requests.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">✉️</span> Permohonan Surat
+                </a>
+                <a href="{{ route('admin.letter-types.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.letter-types.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">📋</span> Jenis Surat
+                </a>
+                <a href="{{ route('admin.patients.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.patients.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">👥</span> Data Pasien
+                </a>
+            @elseif($role === 'petugas_lab')
+                <a href="{{ route('petugas-lab.dashboard') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('petugas-lab.dashboard') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">📊</span> Dashboard
+                </a>
+                <a href="{{ route('petugas-lab.lab-results.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('petugas-lab.lab-results.*') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">🔬</span> Hasil Pemeriksaan
+                </a>
+                <a href="{{ route('petugas-lab.lab-results.create') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('petugas-lab.lab-results.create') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">➕</span> Input Hasil Baru
+                </a>
+            @elseif($role === 'dokter')
+                <a href="{{ route('dokter.dashboard') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dokter.dashboard') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">📊</span> Dashboard
+                </a>
+                <a href="{{ route('dokter.lab-results.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dokter.lab-results.*') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">🧪</span> Validasi Hasil Lab
+                </a>
+                <a href="{{ route('dokter.schedules.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dokter.schedules.*') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">📅</span> Jadwal Praktik
+                </a>
+            @endif
 
             <div class="pt-10">
                 <form action="{{ route('admin.logout') }}" method="POST">
@@ -61,6 +91,7 @@
                 </form>
             </div>
         </nav>
+
     </div>
 
     <!-- Main Content -->

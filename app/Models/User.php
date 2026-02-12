@@ -54,6 +54,21 @@ class User extends Authenticatable
         return $this->hasOne(Patient::class);
     }
 
+    public function doctorSchedules()
+    {
+        return $this->hasMany(DoctorSchedule::class, 'doctor_id');
+    }
+
+    public function inputtedLabResults()
+    {
+        return $this->hasMany(LabResult::class, 'inputted_by');
+    }
+
+    public function validatedLabResults()
+    {
+        return $this->hasMany(LabResult::class, 'validated_by');
+    }
+
     protected function password(): Attribute
     {
         return Attribute::make(
