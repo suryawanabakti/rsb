@@ -91,6 +91,15 @@
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dokter.schedules.*') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                     <span class="mr-3">📅</span> Jadwal Praktik
                 </a>
+            @elseif($role === 'pimpinan')
+                <a href="{{ route('pimpinan.dashboard') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('pimpinan.dashboard') ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">📊</span> Dashboard
+                </a>
+                <a href="{{ route('pimpinan.reports.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('pimpinan.reports.*') ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">📈</span> Laporan
+                </a>
             @endif
 
             <div class="pt-10">
@@ -174,7 +183,8 @@
                 <div class="flex items-center space-x-4">
                     <div class="text-right">
                         <p class="text-sm font-bold text-slate-900">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-slate-500 uppercase">{{ str_replace('_', ' ', Auth::user()->role) }}</p>
+                        <p class="text-xs text-slate-500 uppercase">{{ str_replace('_', ' ', Auth::user()->role) }}
+                        </p>
                     </div>
                     <div
                         class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-white shadow-sm">

@@ -25,7 +25,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // Only allow admin, petugas_lab, dokter, pasien
-            if (!in_array($user->role, ['admin', 'petugas_lab', 'dokter', 'pasien'])) {
+            if (!in_array($user->role, ['admin', 'petugas_lab', 'dokter', 'pasien', 'pimpinan'])) {
                 Auth::logout();
                 throw ValidationException::withMessages([
                     'username' => ['Role pengguna tidak valid.'],
@@ -39,6 +39,7 @@ class AuthController extends Controller
                 'petugas_lab' => redirect()->intended('/petugas-lab/dashboard'),
                 'dokter' => redirect()->intended('/dokter/dashboard'),
                 'pasien' => redirect()->intended('/pasien/dashboard'),
+                'pimpinan' => redirect()->intended('/pimpinan/dashboard'),
                 default => redirect()->intended('/admin/dashboard'),
             };
         }

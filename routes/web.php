@@ -22,6 +22,9 @@ use App\Http\Controllers\Pasien\LetterRequestController as PasienLetterRequestCo
 use App\Http\Controllers\Pasien\NotificationController as PasienNotificationController;
 use App\Http\Controllers\Pasien\LabResultController as PasienLabResultController;
 
+use App\Http\Controllers\Pimpinan\DashboardController as PimpinanDashboardController;
+use App\Http\Controllers\Pimpinan\ReportController as PimpinanReportController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -106,4 +109,10 @@ Route::prefix('pasien')->name('pasien.')->middleware(['auth'])->group(function (
         Route::get('/', [PasienLabResultController::class, 'index'])->name('index');
         Route::get('/{id}', [PasienLabResultController::class, 'show'])->name('show');
     });
+});
+
+// Pimpinan Routes
+Route::prefix('pimpinan')->name('pimpinan.')->middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [PimpinanDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/reports', [PimpinanReportController::class, 'index'])->name('reports.index');
 });

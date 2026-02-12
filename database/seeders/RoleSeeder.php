@@ -16,6 +16,15 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create Pimpinan user
+        User::create([
+            'name' => 'Bapak Pimpinan',
+            'username' => 'pimpinan',
+            'password' => 'password123',
+            'phone' => '081300000000',
+            'role' => 'pimpinan',
+        ]);
+
         // Create Petugas Lab user
         $petugasLab = User::create([
             'name' => 'Andi Petugas Lab',
