@@ -51,6 +51,9 @@ class LetterRequestController extends Controller
             'processed_by' => auth()->id(),
         ]);
 
+        // Send notification to patient
+        $letterRequest->patient->user->notify(new \App\Notifications\LetterRequestStatusChanged($letterRequest));
+
         return back()->with('success', 'Status permohonan berhasil diperbarui.');
     }
 }

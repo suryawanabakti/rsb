@@ -24,11 +24,11 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            // Only allow admin, petugas_lab, dokter
-            if (!in_array($user->role, ['admin', 'petugas_lab', 'dokter'])) {
+            // Only allow admin, petugas_lab, dokter, pasien
+            if (!in_array($user->role, ['admin', 'petugas_lab', 'dokter', 'pasien'])) {
                 Auth::logout();
                 throw ValidationException::withMessages([
-                    'username' => ['Akun pasien hanya dapat login melalui aplikasi mobile.'],
+                    'username' => ['Role pengguna tidak valid.'],
                 ]);
             }
 
@@ -38,6 +38,7 @@ class AuthController extends Controller
             return match ($user->role) {
                 'petugas_lab' => redirect()->intended('/petugas-lab/dashboard'),
                 'dokter' => redirect()->intended('/dokter/dashboard'),
+                'pasien' => redirect()->intended('/pasien/dashboard'),
                 default => redirect()->intended('/admin/dashboard'),
             };
         }

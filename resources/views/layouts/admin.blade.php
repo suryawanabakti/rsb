@@ -53,6 +53,18 @@
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.patients.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                     <span class="mr-3">👥</span> Data Pasien
                 </a>
+
+                <div class="px-4 pt-4 pb-2">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Manajemen Pengguna</p>
+                </div>
+                <a href="{{ route('admin.dokters.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.dokters.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">👨‍⚕️</span> Data Dokter
+                </a>
+                <a href="{{ route('admin.petugas-labs.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.petugas-labs.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">🧪</span> Data Petugas Lab
+                </a>
             @elseif($role === 'petugas_lab')
                 <a href="{{ route('petugas-lab.dashboard') }}"
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('petugas-lab.dashboard') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">

@@ -27,6 +27,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [LetterRequestController::class, 'show']);
     });
 
+    // Notifications
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
+        Route::get('/unread-count', [\App\Http\Controllers\Api\NotificationController::class, 'unreadCount']);
+        Route::patch('/{id}/read', [\App\Http\Controllers\Api\NotificationController::class, 'markAsRead']);
+        Route::post('/mark-all-read', [\App\Http\Controllers\Api\NotificationController::class, 'markAllAsRead']);
+    });
+
     // Lab Results
     Route::prefix('lab-results')->group(function () {
         Route::get('/', [LabResultController::class, 'index']);

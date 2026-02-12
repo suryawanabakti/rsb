@@ -21,7 +21,7 @@ class LetterRequestService
 
             if (isset($data['files'])) {
                 foreach ($data['files'] as $file) {
-                    $path = $file->store('letter_requests/' . $letterRequest->id);
+                    $path = $file->store('letter-attachments', 'public');
 
                     RequestFile::create([
                         'letter_request_id' => $letterRequest->id,

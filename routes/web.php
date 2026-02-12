@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LetterRequestController;
 use App\Http\Controllers\Admin\LetterTypeController;
 use App\Http\Controllers\Admin\PatientController;
+use App\Http\Controllers\Admin\DokterController;
+use App\Http\Controllers\Admin\PetugasLabController;
 
 use App\Http\Controllers\PetugasLab\DashboardController as PetugasLabDashboardController;
 use App\Http\Controllers\PetugasLab\LabResultController as PetugasLabLabResultController;
@@ -14,6 +16,10 @@ use App\Http\Controllers\PetugasLab\LabResultController as PetugasLabLabResultCo
 use App\Http\Controllers\Dokter\DashboardController as DokterDashboardController;
 use App\Http\Controllers\Dokter\LabResultController as DokterLabResultController;
 use App\Http\Controllers\Dokter\ScheduleController as DokterScheduleController;
+
+use App\Http\Controllers\Pasien\DashboardController as PasienDashboardController;
+use App\Http\Controllers\Pasien\LetterRequestController as PasienLetterRequestController;
+use App\Http\Controllers\Pasien\NotificationController as PasienNotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,6 +48,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/', [PatientController::class, 'index'])->name('index');
             Route::get('/{patient}', [PatientController::class, 'show'])->name('show');
         });
+
+        // Users Management
+        Route::resource('dokters', DokterController::class)->except(['show', 'edit', 'update']);
+        Route::resource('petugas-labs', PetugasLabController::class)->except(['show', 'edit', 'update']);
     });
 });
 
@@ -72,5 +82,22 @@ Route::prefix('dokter')->name('dokter.')->middleware(['auth'])->group(function (
 
     Route::prefix('schedules')->name('schedules.')->group(function () {
         Route::get('/', [DokterScheduleController::class, 'index'])->name('index');
+    });
+});
+
+// Pasien Routes
+Route::prefix('pasien')->name('pasien.')->middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [PasienDashboardController::class, 'index'])->name('dashboard');
+
+    Route::prefix('letter-requests')->name('letter-requests.')->group(function () {
+        Route::get('/', [PasienLetterRequestController::class, 'index'])->name('index');
+        Route::get('/create', [PasienLetterRequestController::class, 'create'])->name('create');
+        Route::post('/', [PasienLetterRequestController::class, 'store'])->name('store');
+        Route::get('/{letterRequest}', [PasienLetterRequestController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::patch('/{id}/read', [PasienNotificationController::class, 'markAsRead'])->name('read');
+        Route::post('/mark-all-read', [PasienNotificationController::class, 'markAllAsRead'])->name('mark-all-read');
     });
 });
