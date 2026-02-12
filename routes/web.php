@@ -20,6 +20,7 @@ use App\Http\Controllers\Dokter\ScheduleController as DokterScheduleController;
 use App\Http\Controllers\Pasien\DashboardController as PasienDashboardController;
 use App\Http\Controllers\Pasien\LetterRequestController as PasienLetterRequestController;
 use App\Http\Controllers\Pasien\NotificationController as PasienNotificationController;
+use App\Http\Controllers\Pasien\LabResultController as PasienLabResultController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -99,5 +100,10 @@ Route::prefix('pasien')->name('pasien.')->middleware(['auth'])->group(function (
     Route::prefix('notifications')->name('notifications.')->group(function () {
         Route::patch('/{id}/read', [PasienNotificationController::class, 'markAsRead'])->name('read');
         Route::post('/mark-all-read', [PasienNotificationController::class, 'markAllAsRead'])->name('mark-all-read');
+    });
+
+    Route::prefix('lab-results')->name('lab-results.')->group(function () {
+        Route::get('/', [PasienLabResultController::class, 'index'])->name('index');
+        Route::get('/{id}', [PasienLabResultController::class, 'show'])->name('show');
     });
 });

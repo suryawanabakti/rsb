@@ -38,6 +38,12 @@
                 class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('pasien.dashboard') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                 <span class="mr-3">📊</span> Dashboard
             </a>
+            <a href="{{ route('pasien.lab-results.index') }}"
+                class="flex items-center space-x-3 px-6 py-4 {{ request()->routeIs('pasien.lab-results.*') ? 'bg-blue-600 text-white' : 'text-blue-100 hover:bg-blue-600/50 hover:text-white' }} transition-all duration-300 group">
+                <span class="text-xl group-hover:scale-110 transition-transform duration-300">🧪</span>
+                <span class="font-bold tracking-wide">Hasil Lab</span>
+            </a>
+
             <a href="{{ route('pasien.letter-requests.index') }}"
                 class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('pasien.letter-requests.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                 <span class="mr-3">✉️</span> Permohonan Surat
