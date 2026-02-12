@@ -1,33 +1,31 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DokterController;
 use App\Http\Controllers\Admin\LetterRequestController;
 use App\Http\Controllers\Admin\LetterTypeController;
 use App\Http\Controllers\Admin\PatientController;
-use App\Http\Controllers\Admin\DokterController;
 use App\Http\Controllers\Admin\PetugasLabController;
-
-use App\Http\Controllers\PetugasLab\DashboardController as PetugasLabDashboardController;
-use App\Http\Controllers\PetugasLab\LabResultController as PetugasLabLabResultController;
-
 use App\Http\Controllers\Dokter\DashboardController as DokterDashboardController;
 use App\Http\Controllers\Dokter\LabResultController as DokterLabResultController;
 use App\Http\Controllers\Dokter\ScheduleController as DokterScheduleController;
-
 use App\Http\Controllers\Pasien\DashboardController as PasienDashboardController;
+use App\Http\Controllers\Pasien\LabResultController as PasienLabResultController;
 use App\Http\Controllers\Pasien\LetterRequestController as PasienLetterRequestController;
 use App\Http\Controllers\Pasien\NotificationController as PasienNotificationController;
-use App\Http\Controllers\Pasien\LabResultController as PasienLabResultController;
-
+use App\Http\Controllers\PetugasLab\DashboardController as PetugasLabDashboardController;
+use App\Http\Controllers\PetugasLab\LabResultController as PetugasLabLabResultController;
 use App\Http\Controllers\Pimpinan\DashboardController as PimpinanDashboardController;
 use App\Http\Controllers\Pimpinan\ReportController as PimpinanReportController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/login', function () {
+    return view('admin.login');
+})->name('login');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
