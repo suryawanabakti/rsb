@@ -24,9 +24,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/login', function () {
-    return view('admin.login');
-})->name('login');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::get('/register', [\App\Http\Controllers\Pasien\RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [\App\Http\Controllers\Pasien\RegisterController::class, 'register'])->name('register.submit');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,31 +38,38 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::middleware(['auth', 'role:admin'])->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-        // Letter Requests
-        Route::prefix('letter-requests')->name('letter-requests.')->group(function () {
-            Route::get('/', [LetterRequestController::class, 'index'])->name('index');
-            Route::get('/{letterRequest}', [LetterRequestController::class, 'show'])->name('show');
-            Route::patch('/{letterRequest}/status', [LetterRequestController::class, 'updateStatus'])->name('update-status');
-            Route::post('/{letterRequest}/upload-final', [LetterRequestController::class, 'uploadFinalLetter'])->name('upload-final');
-            Route::get('/{letterRequest}/print-skbn', [LetterRequestController::class, 'printSkbn'])->name('print-skbn');
+    Route::middleware(['auth'])->group(function () {
+        Route::middleware(['role:admin'])->group(function () {
+            Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         });
 
-        // Letter Types
-        Route::resource('letter-types', LetterTypeController::class)->except(['create', 'edit', 'show']);
-
-        // Patients
-        Route::prefix('patients')->name('patients.')->group(function () {
-            Route::get('/', [PatientController::class, 'index'])->name('index');
-            Route::get('/{patient}', [PatientController::class, 'show'])->name('show');
-            Route::patch('/{patient}/extra-info', [PatientController::class, 'updateExtraInfo'])->name('update-extra-info');
+        // Shared Letter Requests (Admin & Dokter)
+        Route::middleware(['role:admin,dokter'])->group(function () {
+            Route::prefix('letter-requests')->name('letter-requests.')->group(function () {
+                Route::get('/', [LetterRequestController::class, 'index'])->name('index');
+                Route::get('/{letterRequest}', [LetterRequestController::class, 'show'])->name('show');
+                Route::patch('/{letterRequest}/status', [LetterRequestController::class, 'updateStatus'])->name('update-status');
+                Route::post('/{letterRequest}/upload-final', [LetterRequestController::class, 'uploadFinalLetter'])->name('upload-final');
+                Route::get('/{letterRequest}/print-skbn', [LetterRequestController::class, 'printSkbn'])->name('print-skbn');
+            });
         });
 
-        // Users Management
-        Route::resource('dokters', DokterController::class)->except(['show', 'edit', 'update']);
-        Route::resource('petugas-labs', PetugasLabController::class)->except(['show', 'edit', 'update']);
+        // Admin Only Management
+        Route::middleware(['role:admin'])->group(function () {
+            // Letter Types
+            Route::resource('letter-types', LetterTypeController::class)->except(['create', 'edit', 'show']);
+
+            // Patients
+            Route::prefix('patients')->name('patients.')->group(function () {
+                Route::get('/', [PatientController::class, 'index'])->name('index');
+                Route::get('/{patient}', [PatientController::class, 'show'])->name('show');
+                Route::patch('/{patient}/extra-info', [PatientController::class, 'updateExtraInfo'])->name('update-extra-info');
+            });
+
+            // Users Management
+            Route::resource('dokters', DokterController::class)->except(['show', 'edit', 'update']);
+            Route::resource('petugas-labs', PetugasLabController::class)->except(['show', 'edit', 'update']);
+        });
     });
 });
 

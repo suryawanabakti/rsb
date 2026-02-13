@@ -54,6 +54,14 @@
                     Masuk Sekarang
                 </button>
             </form>
+
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-500">
+                    Belum punya akun?
+                    <a href="{{ route('register') }}" class="text-blue-600 font-bold hover:underline">Daftar sebagai
+                        Pasien</a>
+                </p>
+            </div>
         </div>
 
         <p class="text-center text-gray-500 text-sm mt-8">

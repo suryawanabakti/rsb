@@ -83,6 +83,10 @@
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dokter.dashboard') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                     <span class="mr-3">📊</span> Dashboard
                 </a>
+                <a href="{{ route('admin.letter-requests.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.letter-requests.*') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">✉️</span> Permohonan Surat
+                </a>
                 <a href="{{ route('dokter.lab-results.index') }}"
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dokter.lab-results.*') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                     <span class="mr-3">🧪</span> Validasi Hasil Lab

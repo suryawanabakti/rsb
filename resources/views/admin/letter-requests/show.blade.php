@@ -170,7 +170,7 @@
         <div class="space-y-6">
             <!-- Print Button Section -->
             @if (in_array($letterRequest->status, ['verified', 'approved', 'completed']))
-                <div class="bg-indigo-600 rounded-2xl shadow-xl p-6 text-white">
+                <div class="bg-indigo-600 rounded-2xl shadow-xl p-6 text-white hidden">
                     <h3 class="font-bold text-lg mb-4">Cetak Surat Resmi</h3>
                     <p class="text-indigo-100 text-sm mb-6">Gunakan format profesional untuk mencetak surat ini langsung
                         dari sistem.</p>
