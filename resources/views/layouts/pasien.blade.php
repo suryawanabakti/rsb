@@ -133,14 +133,16 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <div class="text-right">
-                        <p class="text-sm font-bold text-slate-900">{{ Auth::user()->name }}</p>
+                    <a href="{{ route('profile.edit') }}" class="text-right hover:opacity-80 transition-opacity">
+                        <p class="text-sm font-bold text-slate-900 line-clamp-1">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-slate-500">Pasien</p>
-                    </div>
-                    <div
-                        class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-white shadow-sm">
-                        {{ substr(Auth::user()->name, 0, 1) }}
-                    </div>
+                    </a>
+                    <a href="{{ route('profile.edit') }}" class="group">
+                        <div
+                            class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden transition-all group-hover:ring-4 group-hover:ring-blue-500/10">
+                            <img src="{{ Auth::user()->photo_url }}" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                    </a>
                 </div>
             </div>
         </header>

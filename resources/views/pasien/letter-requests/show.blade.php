@@ -50,7 +50,7 @@
             </div>
 
             <!-- Documents -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
                 <div class="p-6 border-b border-slate-100">
                     <h3 class="font-bold text-slate-900 text-lg">Dokumen Lampiran</h3>
                 </div>
@@ -72,6 +72,28 @@
                     @endforelse
                 </div>
             </div>
+
+            <!-- Final Letter (If available) -->
+            @if ($letterRequest->final_letter)
+                <div class="bg-emerald-600 rounded-2xl shadow-lg border border-emerald-500 overflow-hidden">
+                    <div class="p-6 border-b border-emerald-500 flex items-center justify-between">
+                        <h3 class="font-bold text-white text-lg">Surat Selesai</h3>
+                        <span
+                            class="px-3 py-1 bg-white/20 text-white rounded-full text-xs font-bold uppercase tracking-wider">Tersedia</span>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-emerald-50 mb-6 text-sm">Permohonan Anda telah selesai diproses. Silakan unduh hasil
+                            surat resmi di bawah ini.</p>
+                        <a href="{{ Storage::url($letterRequest->final_letter) }}" target="_blank"
+                            class="flex items-center justify-center space-x-2 w-full bg-white text-emerald-600 font-bold py-4 rounded-xl shadow-lg hover:bg-emerald-50 transition-all text-sm uppercase tracking-widest">
+                            <span>📥</span>
+                            <span>Unduh Surat Resmi</span>
+                        </a>
+                        <p class="text-center mt-4 text-[10px] text-emerald-100 uppercase tracking-widest font-bold">Harap
+                            simpan dokumen ini dengan baik</p>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <!-- Timeline / Status History could go here -->

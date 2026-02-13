@@ -18,9 +18,17 @@ class LetterRequest extends Model
         'submission_date',
         'status',
         'admin_notes',
+        'final_letter',
         'processed_at',
         'processed_by',
     ];
+
+    protected $appends = ['final_letter_url'];
+
+    public function getFinalLetterUrlAttribute()
+    {
+        return $this->final_letter ? asset('storage/' . $this->final_letter) : null;
+    }
 
     public function patient()
     {

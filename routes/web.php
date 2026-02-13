@@ -18,6 +18,7 @@ use App\Http\Controllers\PetugasLab\DashboardController as PetugasLabDashboardCo
 use App\Http\Controllers\PetugasLab\LabResultController as PetugasLabLabResultController;
 use App\Http\Controllers\Pimpinan\DashboardController as PimpinanDashboardController;
 use App\Http\Controllers\Pimpinan\ReportController as PimpinanReportController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,12 +28,17 @@ Route::get('/login', function () {
     return view('admin.login');
 })->name('login');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Letter Requests
@@ -40,6 +46,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/', [LetterRequestController::class, 'index'])->name('index');
             Route::get('/{letterRequest}', [LetterRequestController::class, 'show'])->name('show');
             Route::patch('/{letterRequest}/status', [LetterRequestController::class, 'updateStatus'])->name('update-status');
+            Route::post('/{letterRequest}/upload-final', [LetterRequestController::class, 'uploadFinalLetter'])->name('upload-final');
+            Route::get('/{letterRequest}/print-skbn', [LetterRequestController::class, 'printSkbn'])->name('print-skbn');
         });
 
         // Letter Types
@@ -49,6 +57,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('patients')->name('patients.')->group(function () {
             Route::get('/', [PatientController::class, 'index'])->name('index');
             Route::get('/{patient}', [PatientController::class, 'show'])->name('show');
+            Route::patch('/{patient}/extra-info', [PatientController::class, 'updateExtraInfo'])->name('update-extra-info');
         });
 
         // Users Management
@@ -58,7 +67,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 // Petugas Lab Routes
-Route::prefix('petugas-lab')->name('petugas-lab.')->middleware(['auth'])->group(function () {
+Route::prefix('petugas-lab')->name('petugas-lab.')->middleware(['auth', 'role:petugas_lab'])->group(function () {
     Route::get('/dashboard', [PetugasLabDashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('lab-results')->name('lab-results.')->group(function () {
@@ -73,7 +82,7 @@ Route::prefix('petugas-lab')->name('petugas-lab.')->middleware(['auth'])->group(
 });
 
 // Dokter Routes
-Route::prefix('dokter')->name('dokter.')->middleware(['auth'])->group(function () {
+Route::prefix('dokter')->name('dokter.')->middleware(['auth', 'role:dokter'])->group(function () {
     Route::get('/dashboard', [DokterDashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('lab-results')->name('lab-results.')->group(function () {
@@ -88,7 +97,7 @@ Route::prefix('dokter')->name('dokter.')->middleware(['auth'])->group(function (
 });
 
 // Pasien Routes
-Route::prefix('pasien')->name('pasien.')->middleware(['auth'])->group(function () {
+Route::prefix('pasien')->name('pasien.')->middleware(['auth', 'role:pasien'])->group(function () {
     Route::get('/dashboard', [PasienDashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('letter-requests')->name('letter-requests.')->group(function () {
@@ -110,7 +119,7 @@ Route::prefix('pasien')->name('pasien.')->middleware(['auth'])->group(function (
 });
 
 // Pimpinan Routes
-Route::prefix('pimpinan')->name('pimpinan.')->middleware(['auth'])->group(function () {
+Route::prefix('pimpinan')->name('pimpinan.')->middleware(['auth', 'role:pimpinan'])->group(function () {
     Route::get('/dashboard', [PimpinanDashboardController::class, 'index'])->name('dashboard');
     Route::get('/reports', [PimpinanReportController::class, 'index'])->name('reports.index');
 });

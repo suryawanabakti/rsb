@@ -30,4 +30,19 @@ class PatientController extends Controller
         $patient->load(['user', 'letterRequests.letterType']);
         return view('admin.patients.show', compact('patient'));
     }
+
+    public function updateExtraInfo(Request $request, Patient $patient)
+    {
+        $validated = $request->validate([
+            'pangkat' => 'nullable|string|max:255',
+            'nrp_nip' => 'nullable|string|max:50',
+            'pendidikan_terakhir' => 'nullable|string|max:255',
+            'jabatan_kesatuan' => 'nullable|string|max:255',
+            'address' => 'required|string',
+        ]);
+
+        $patient->update($validated);
+
+        return back()->with('success', 'Informasi tambahan pasien berhasil diperbarui.');
+    }
 }

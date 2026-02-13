@@ -25,7 +25,10 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
+        'nrp',
+        'photo',
     ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -47,6 +50,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected function photoUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->photo) {
+                    return asset('storage/' . $this->photo);
+                }
+
+                return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+            },
+        );
     }
 
     public function patient()
@@ -72,7 +88,7 @@ class User extends Authenticatable
     protected function password(): Attribute
     {
         return Attribute::make(
-            set: fn($value) => bcrypt($value),
+            set: fn($value) => empty($value) ? $this->password : bcrypt($value),
         );
     }
 }

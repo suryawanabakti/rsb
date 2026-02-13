@@ -56,4 +56,35 @@ class LetterRequestController extends Controller
 
         return back()->with('success', 'Status permohonan berhasil diperbarui.');
     }
+
+    public function uploadFinalLetter(Request $request, LetterRequest $letterRequest)
+    {
+        $request->validate([
+            'final_letter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        if ($request->hasFile('final_letter')) {
+            $path = $request->file('final_letter')->store('final-letters', 'public');
+            $letterRequest->update([
+                'final_letter' => $path,
+                'status' => 'completed',
+            ]);
+        }
+
+        return back()->with('success', 'Surat final berhasil diunggah dan status diperbarui menjadi SELESAI.');
+    }
+
+    public function printSkbn(LetterRequest $letterRequest)
+    {
+        $letterRequest->load(['patient.user', 'letterType', 'files']);
+
+        // Check if there are lab results for this request
+        $labResults = \App\Models\LabResult::where('letter_request_id', $letterRequest->id)
+            ->orWhere('patient_id', $letterRequest->patient_id)
+            ->with('validator')
+            ->latest()
+            ->first();
+
+        return view('admin.letter-requests.print-skbn', compact('letterRequest', 'labResults'));
+    }
 }

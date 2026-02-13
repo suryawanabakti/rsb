@@ -14,6 +14,10 @@ class Patient extends Model
         'address',
         'birth_date',
         'gender',
+        'pangkat',
+        'nrp_nip',
+        'pendidikan_terakhir',
+        'jabatan_kesatuan',
     ];
 
     public function user()
