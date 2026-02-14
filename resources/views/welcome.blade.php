@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Layanan Digital RS. Bhayangkara Makassar</title>
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -159,7 +159,8 @@
             </div>
             <div class="relative z-10 max-w-2xl mx-auto">
                 <h2 class="text-4xl md:text-5xl font-black text-white leading-tight mb-8">Siap Memulai Layanan
-                    <br>Kesehatan Digital?</h2>
+                    <br>Kesehatan Digital?
+                </h2>
                 <p class="text-blue-100 text-lg mb-12">Gunakan aplikasi mobile kami untuk mendapatkan akses penuh ke
                     semua layanan surat menyurat rumah sakit secara instan.</p>
                 <div class="flex flex-wrap justify-center gap-4">
@@ -179,7 +180,7 @@
     <footer class="py-12 border-t border-slate-100 bg-white">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
             <div class="flex items-center space-x-3 mb-6 md:mb-0 opacity-50">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-8 grayscale">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-8 grayscale object-contain">
                 <p class="text-xs font-bold text-slate-500">© {{ date('Y') }} RS. BHAYANGKARA MAKASSAR. All rights
                     reserved.</p>
             </div>

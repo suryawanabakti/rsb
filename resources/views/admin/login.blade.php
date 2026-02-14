@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - RS. Bhayangkara Makassar</title>
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -19,7 +19,7 @@
 <body class="bg-gray-50 flex items-center justify-center min-h-screen">
     <div class="max-w-md w-full p-6">
         <div class="text-center mb-8 flex flex-col items-center">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-24 h-24 mb-4">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-24 h-24 mb-4 object-contain">
             <h1 class="text-2xl font-extrabold text-blue-900 leading-tight">RS. BHAYANGKARA<br><span
                     class="text-lg">MAKASSAR</span></h1>
             <p class="text-gray-600 mt-2">Sistem Administrasi Surat</p>

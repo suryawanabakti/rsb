@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Pasien') - RS. Bhayangkara Makassar</title>
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
@@ -26,7 +26,7 @@
     <div class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 transition-transform duration-300 transform"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
         <div class="flex items-center space-x-3 h-20 px-6 bg-slate-800 border-b border-slate-700">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-10 h-10">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-10 h-10 object-contain">
             <div class="overflow-hidden">
                 <p class="text-white font-black text-sm leading-tight truncate">RS. BHAYANGKARA</p>
                 <p class="text-blue-400 font-bold text-[10px] tracking-tight truncate uppercase">MAKASSAR</p>
