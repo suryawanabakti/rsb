@@ -21,7 +21,7 @@
     </style>
 </head>
 
-<body class="bg-gray-50" x-data="{ sidebarOpen: true }">
+<body class="bg-gray-50" x-data="{ sidebarOpen: false }">
     <!-- Sidebar -->
     <div class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 transition-transform duration-300 transform"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
