@@ -32,7 +32,7 @@
                         <span class="mr-2">👤</span> Informasi Pasien
                     </h3>
                     <button type="button" onclick="document.getElementById('edit-patient-form').classList.toggle('hidden')"
-                        class="text-xs font-bold text-blue-600 hover:text-blue-800 uppercase tracking-widest transition-colors">
+                        class="hidden text-xs font-bold text-blue-600 hover:text-blue-800 uppercase tracking-widest transition-colors">
                         Edit Info Format Surat
                     </button>
                 </div>

@@ -35,12 +35,31 @@ class ProfileController extends Controller
             ]);
         }
 
+        if ($user->role === 'dokter') {
+            $rules = array_merge($rules, [
+                'nrp' => 'nullable|string|max:50',
+                'address' => 'nullable|string',
+                'sip_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            ]);
+        }
+
         $request->validate($rules);
 
         $data = $request->only(['name', 'phone']);
 
+        if ($user->role === 'dokter') {
+            $data = array_merge($data, $request->only(['nrp', 'address']));
+        }
+
         if ($request->filled('password')) {
             $data['password'] = $request->password;
+        }
+
+        if ($request->hasFile('sip_file') && $user->role === 'dokter') {
+            if ($user->sip_file) {
+                Storage::disk('public')->delete($user->sip_file);
+            }
+            $data['sip_file'] = $request->file('sip_file')->store('sip', 'public');
         }
 
         if ($request->hasFile('photo')) {

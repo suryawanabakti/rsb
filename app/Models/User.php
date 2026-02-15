@@ -26,6 +26,8 @@ class User extends Authenticatable
         'role',
         'phone',
         'nrp',
+        'address',
+        'sip_file',
         'photo',
     ];
 
@@ -62,6 +64,13 @@ class User extends Authenticatable
 
                 return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
             },
+        );
+    }
+
+    protected function sipUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->sip_file ? asset('storage/' . $this->sip_file) : null,
         );
     }
 

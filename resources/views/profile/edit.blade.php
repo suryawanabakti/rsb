@@ -126,6 +126,46 @@
                                     </div>
                                 </div>
                             @endif
+
+                            @if (Auth::user()->role === 'dokter')
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">NIP
+                                            / NRP</label>
+                                        <input type="text" name="nrp" value="{{ old('nrp', Auth::user()->nrp) }}"
+                                            class="w-full px-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none text-slate-900 shadow-sm">
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Alamat
+                                            Domisili</label>
+                                        <input type="text" name="address"
+                                            value="{{ old('address', Auth::user()->address) }}"
+                                            class="w-full px-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none text-slate-900 shadow-sm">
+                                    </div>
+                                </div>
+
+                                <div class="pt-4">
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Surat
+                                        Izin Praktek (SIP)</label>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex-grow">
+                                            <input type="file" name="sip_file"
+                                                class="w-full px-4 py-2 rounded-xl bg-slate-50 border border-dashed border-slate-300 text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all">
+                                            <p class="text-[10px] text-slate-400 mt-1 italic">Format: PDF, JPG, PNG. Max:
+                                                2MB</p>
+                                        </div>
+                                        @if (Auth::user()->sip_file)
+                                            <a href="{{ Auth::user()->sip_url }}" target="_blank"
+                                                class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl text-xs font-bold hover:bg-blue-100 transition-colors flex items-center shadow-sm">
+                                                <span class="mr-2">📄</span> Lihat SIP
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

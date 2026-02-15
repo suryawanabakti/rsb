@@ -54,7 +54,11 @@
                     <span class="mr-3">👥</span> Data Pasien
                 </a>
 
-                <div class="px-4 pt-4 pb-2">
+                <a href="{{ route('admin.doctor-schedules.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.doctor-schedules.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                    <span class="mr-3">📅</span> Jadwal Dokter
+                </a>
+                \n <div class="px-4 pt-4 pb-2">
                     <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Manajemen Pengguna</p>
                 </div>
                 <a href="{{ route('admin.dokters.index') }}"

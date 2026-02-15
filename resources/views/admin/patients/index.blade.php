@@ -60,7 +60,8 @@
                                 <p class="text-sm text-slate-600">{{ $patient->user->phone ?? '-' }}</p>
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <button class="text-blue-600 font-bold text-xs hover:underline">Detail</button>
+                                <a href="{{ route('admin.patients.show', $patient->id) }}"
+                                    class="text-blue-600 font-bold text-xs hover:underline">Detail</a>
                             </td>
                         </tr>
                     @empty

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DoctorScheduleController;
 use App\Http\Controllers\Admin\DokterController;
 use App\Http\Controllers\Admin\LetterRequestController;
 use App\Http\Controllers\Admin\LetterTypeController;
@@ -67,8 +68,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             });
 
             // Users Management
-            Route::resource('dokters', DokterController::class)->except(['show', 'edit', 'update']);
-            Route::resource('petugas-labs', PetugasLabController::class)->except(['show', 'edit', 'update']);
+            Route::resource('dokters', DokterController::class)->except(['show']);
+            Route::resource('petugas-labs', PetugasLabController::class)->except(['show']);
+            Route::resource('doctor-schedules', DoctorScheduleController::class)->except(['show']);
         });
     });
 });

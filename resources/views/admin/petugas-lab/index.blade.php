@@ -20,7 +20,7 @@
             <form action="{{ route('admin.petugas-labs.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
                 <div class="flex-grow">
                     <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="Cari Nama, Username, atau No. HP..."
+                        placeholder="Cari Nama, Username, No. HP, atau NIP/NRP..."
                         class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none text-sm transition-all">
                 </div>
                 <button type="submit"
@@ -35,31 +35,40 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 text-slate-400 text-xs font-black uppercase tracking-wider">
-                        <th class="px-6 py-4">Nama Lengkap</th>
-                        <th class="px-6 py-4">Username</th>
+                        <th class="px-6 py-4">Nama</th>
+                        <th class="px-6 py-4">NIP / NRP</th>
                         <th class="px-6 py-4">No. HP</th>
+                        <th class="px-6 py-4">Alamat</th>
                         <th class="px-6 py-4 text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @forelse($petugasLabs as $petugas)
                         <tr class="hover:bg-slate-50/50 transition-colors group">
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 text-sm font-bold text-slate-900">
                                 <div class="flex items-center">
                                     <div
                                         class="h-10 w-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold mr-3 border border-emerald-200">
                                         {{ substr($petugas->name, 0, 1) }}
                                     </div>
-                                    <p class="font-bold text-slate-900">{{ $petugas->name }}</p>
+                                    <div>
+                                        <p class="font-bold text-slate-900">{{ $petugas->name }}</p>
+                                        <p class="text-xs text-slate-500 font-normal">@ {{ $petugas->username }}</p>
+                                    </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <p class="text-sm font-semibold text-slate-700">{{ $petugas->username }}</p>
+                                <p class="text-sm text-slate-600 font-bold tracking-wider">{{ $petugas->nrp ?? '-' }}</p>
                             </td>
                             <td class="px-6 py-4">
                                 <p class="text-sm text-slate-600">{{ $petugas->phone ?? '-' }}</p>
                             </td>
+                            <td class="px-6 py-4">
+                                <p class="text-xs text-slate-500 line-clamp-2 max-w-xs">{{ $petugas->address ?? '-' }}</p>
+                            </td>
                             <td class="px-6 py-4 text-right">
+                                <a href="{{ route('admin.petugas-labs.edit', $petugas->id) }}"
+                                    class="text-blue-600 font-bold text-xs hover:underline mr-3">Edit</a>
                                 <form action="{{ route('admin.petugas-labs.destroy', $petugas->id) }}" method="POST"
                                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus petugas ini?');"
                                     class="inline-block">
@@ -72,7 +81,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-12 text-center text-slate-400 italic">Tidak ada data petugas
+                            <td colspan="5" class="px-6 py-12 text-center text-slate-400 italic">Tidak ada data petugas
                                 lab.
                             </td>
                         </tr>

@@ -32,11 +32,33 @@
                 @enderror
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="nrp" class="block text-sm font-bold text-slate-700 mb-2">NIP / NRP (Opsional)</label>
+                    <input type="text" name="nrp" id="nrp" value="{{ old('nrp') }}"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none transition-all @error('nrp') border-red-500 @enderror"
+                        placeholder="Contoh: 198001012005011001">
+                    @error('nrp')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label for="phone" class="block text-sm font-bold text-slate-700 mb-2">No. HP (Opsional)</label>
+                    <input type="text" name="phone" id="phone" value="{{ old('phone') }}"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none transition-all @error('phone') border-red-500 @enderror"
+                        placeholder="0812xxxxxxxx">
+                    @error('phone')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
             <div class="mb-6">
-                <label for="phone" class="block text-sm font-bold text-slate-700 mb-2">No. HP (Opsional)</label>
-                <input type="text" name="phone" id="phone" value="{{ old('phone') }}"
-                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none transition-all @error('phone') border-red-500 @enderror">
-                @error('phone')
+                <label for="address" class="block text-sm font-bold text-slate-700 mb-2">Alamat Lengkap (Opsional)</label>
+                <textarea name="address" id="address" rows="3"
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none transition-all @error('address') border-red-500 @enderror"
+                    placeholder="Masukkan alamat lengkap petugas..."></textarea>
+                @error('address')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
