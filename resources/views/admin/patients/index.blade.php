@@ -5,7 +5,7 @@
 @section('content')
     <div class="mb-8">
         <h1 class="text-2xl font-bold text-slate-900">Data Pasien</h1>
-        <p class="text-slate-500">Kelola informasi seluruh pasien terdaftar</p>
+        <p class="text-slate-500">Kelola informasi seluruh pasien terdaftar.</p>
     </div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
