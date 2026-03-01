@@ -25,15 +25,15 @@ Sebelum memulai, pastikan software berikut sudah terpasang di komputer Windows A
 Buka **Command Prompt** atau **Git Bash**, lalu jalankan perintah berikut:
 
 ```bash
-git clone https://github.com/NAMA_USER/NAMA_REPO.git
+git clone https://github.com/suryawanabakti/rsb.git
 ```
 
-> Ganti `NAMA_USER/NAMA_REPO` dengan URL repositori yang sebenarnya.
+> Ganti `suryawanabakti/rsb` dengan URL repositori yang sebenarnya.
 
 Masuk ke folder proyek:
 
 ```bash
-cd NAMA_REPO
+cd rsb
 ```
 
 ---
