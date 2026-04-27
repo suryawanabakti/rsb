@@ -119,6 +119,44 @@
                                     </div>
                                     <div>
                                         <label
+                                            class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pangkat</label>
+                                        <input type="text" name="pangkat"
+                                            value="{{ old('pangkat', Auth::user()->patient->pangkat ?? '') }}"
+                                            class="w-full px-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none text-slate-900 shadow-sm"
+                                            placeholder="Contoh: AKBP">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">NRP / NIP</label>
+                                        <input type="text" name="nrp_nip"
+                                            value="{{ old('nrp_nip', Auth::user()->patient->nrp_nip ?? '') }}"
+                                            class="w-full px-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none text-slate-900 shadow-sm"
+                                            placeholder="Contoh: 86091922">
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pendidikan Terakhir</label>
+                                        <input type="text" name="pendidikan_terakhir"
+                                            value="{{ old('pendidikan_terakhir', Auth::user()->patient->pendidikan_terakhir ?? '') }}"
+                                            class="w-full px-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none text-slate-900 shadow-sm"
+                                            placeholder="Contoh: S2">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Jabatan / Kesatuan</label>
+                                        <input type="text" name="jabatan_kesatuan"
+                                            value="{{ old('jabatan_kesatuan', Auth::user()->patient->jabatan_kesatuan ?? '') }}"
+                                            class="w-full px-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none text-slate-900 shadow-sm"
+                                            placeholder="Contoh: GADIK KEPOLISIAN MUDA">
+                                    </div>
+                                    <div>
+                                        <label
                                             class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Alamat</label>
                                         <textarea name="address" rows="1"
                                             class="w-full px-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none text-slate-900 shadow-sm"

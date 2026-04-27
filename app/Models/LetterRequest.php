@@ -17,10 +17,19 @@ class LetterRequest extends Model
         'letter_type_id',
         'submission_date',
         'status',
+        'nomor_surat',
         'admin_notes',
+        'pemeriksaan_data',
         'final_letter',
         'processed_at',
         'processed_by',
+        'dokter_pemeriksa_id',
+    ];
+
+    protected $casts = [
+        'pemeriksaan_data' => 'array',
+        'submission_date' => 'date',
+        'processed_at' => 'datetime',
     ];
 
     protected $appends = ['final_letter_url'];
@@ -48,5 +57,10 @@ class LetterRequest extends Model
     public function processor()
     {
         return $this->belongsTo(User::class, 'processed_by');
+    }
+
+    public function dokterPemeriksa()
+    {
+        return $this->belongsTo(User::class, 'dokter_pemeriksa_id');
     }
 }

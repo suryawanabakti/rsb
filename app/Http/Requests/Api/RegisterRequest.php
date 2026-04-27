@@ -22,6 +22,10 @@ class RegisterRequest extends FormRequest
             'address' => 'required|string',
             'birth_date' => 'required|date',
             'gender' => 'required|in:L,P',
+            'pangkat' => 'nullable|string|max:255',
+            'nrp_nip' => 'nullable|string|max:255',
+            'pendidikan_terakhir' => 'nullable|string|max:255',
+            'jabatan_kesatuan' => 'nullable|string|max:255',
         ];
     }
 }

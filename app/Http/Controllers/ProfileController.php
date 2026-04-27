@@ -32,6 +32,10 @@ class ProfileController extends Controller
                 'address' => 'required|string',
                 'birth_date' => 'required|date',
                 'gender' => 'required|in:L,P',
+                'pangkat' => 'nullable|string|max:255',
+                'nrp_nip' => 'nullable|string|max:255',
+                'pendidikan_terakhir' => 'nullable|string|max:255',
+                'jabatan_kesatuan' => 'nullable|string|max:255',
             ]);
         }
 
@@ -75,7 +79,16 @@ class ProfileController extends Controller
         $user->update($data);
 
         if ($user->role === 'pasien') {
-            $user->patient()->update($request->only(['nik', 'address', 'birth_date', 'gender']));
+            $user->patient()->update($request->only([
+                'nik',
+                'address',
+                'birth_date',
+                'gender',
+                'pangkat',
+                'nrp_nip',
+                'pendidikan_terakhir',
+                'jabatan_kesatuan'
+            ]));
         }
 
         return back()->with('success', 'Profil berhasil diperbarui.');

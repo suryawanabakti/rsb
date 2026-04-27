@@ -18,9 +18,13 @@ class LetterTypeController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:100',
+            'slug' => 'nullable|string|max:100|unique:letter_types',
             'description' => 'nullable|string',
-            'is_active' => 'boolean',
+            'is_active' => 'sometimes|boolean',
         ]);
+
+        $data['is_active'] = $request->has('is_active');
+        $data['slug'] = $data['slug'] ?? \Illuminate\Support\Str::slug($data['name']);
 
         LetterType::create($data);
 
@@ -31,9 +35,13 @@ class LetterTypeController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:100',
+            'slug' => 'nullable|string|max:100|unique:letter_types,slug,' . $letterType->id,
             'description' => 'nullable|string',
-            'is_active' => 'boolean',
+            'is_active' => 'sometimes|boolean',
         ]);
+
+        $data['is_active'] = $request->has('is_active');
+        $data['slug'] = $data['slug'] ?? \Illuminate\Support\Str::slug($data['name']);
 
         $letterType->update($data);
 

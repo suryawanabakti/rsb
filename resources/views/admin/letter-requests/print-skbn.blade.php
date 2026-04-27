@@ -96,8 +96,7 @@
                 onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Coat_of_arms_of_the_Indonesian_National_Police.svg/1024px-Coat_of_arms_of_the_Indonesian_National_Police.svg.png'">
             <h1 class="text-xl font-extrabold uppercase tracking-widest border-b-2 border-black inline-block px-4">SURAT
                 KETERANGAN BEBAS NARKOBA</h1>
-            <p class="text-sm font-bold mt-1">Nomor: SKBN/
-                {{ $letterRequest->id }}/{{ \Carbon\Carbon::now()->translatedFormat('M/Y') }}/Rumkit</p>
+            <p class="text-sm font-bold mt-1">Nomor: {{ $letterRequest->nomor_surat ?? ('SKBN/' . $letterRequest->id . '/' . \Carbon\Carbon::now()->translatedFormat('m/Y') . '/Rumkit') }}</p>
         </div>
 
         <!-- Opening -->
@@ -159,18 +158,13 @@
             <div class="mt-4 grid grid-cols-1 gap-1 max-w-lg mx-auto">
                 @php
                     $parameters = [
-                        ['a', 'Amphetamin (AMP)', 'Negatif'],
-                        ['b', 'Methamphetamin (MET)', 'Negatif'],
-                        ['c', 'Morphine (MOP)', 'Negatif'],
-                        ['d', 'Mariyuana (THC)', 'Negatif'],
-                        ['e', 'Benzodiazepine (BZO)', 'Negatif'],
-                        ['f', 'Cocaine (COC)', 'Negatif'],
+                        ['a', 'Amphetamin (AMP)', $letterRequest->pemeriksaan_data['amp'] ?? 'Negatif'],
+                        ['b', 'Methamphetamin (MET)', $letterRequest->pemeriksaan_data['met'] ?? 'Negatif'],
+                        ['c', 'Morphine (MOP)', $letterRequest->pemeriksaan_data['mop'] ?? 'Negatif'],
+                        ['d', 'Mariyuana (THC)', $letterRequest->pemeriksaan_data['thc'] ?? 'Negatif'],
+                        ['e', 'Benzodiazepine (BZO)', $letterRequest->pemeriksaan_data['bzo'] ?? 'Negatif'],
+                        ['f', 'Cocaine (COC)', $letterRequest->pemeriksaan_data['coc'] ?? 'Negatif'],
                     ];
-
-                    if ($labResults && is_array($labResults->result_data)) {
-                        // Map results if they exist in LabResult
-                        // This is a simplification, in real scenario we'd match names
-                    }
                 @endphp
 
                 @foreach ($parameters as $param)
@@ -178,7 +172,7 @@
                         <div class="w-8">{{ $param[0] }}.</div>
                         <div class="w-64 font-bold">{{ $param[1] }}</div>
                         <div class="w-4">:</div>
-                        <div class="flex-grow font-bold underline decoration-blue-500 text-blue-800">
+                        <div class="flex-grow font-bold underline {{ $param[2] == 'POSITIF' ? 'text-red-600 decoration-red-500' : 'text-blue-800 decoration-blue-500' }}">
                             {{ $param[2] }}</div>
                     </div>
                 @endforeach
@@ -224,8 +218,8 @@
                 </div>
 
                 <p class="text-sm font-bold uppercase underline">
-                    {{ $labResults->validator->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes' }}</p>
-                <p class="text-sm font-bold">AKBP NRP {{ $labResults->validator->nrp ?? '74030679' }}</p>
+                    {{ $letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes' }}</p>
+                <p class="text-sm font-bold">AKBP NRP {{ $letterRequest->dokterPemeriksa->nrp ?? '74030679' }}</p>
             </div>
         </div>
     </div>

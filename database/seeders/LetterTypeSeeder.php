@@ -12,26 +12,27 @@ class LetterTypeSeeder extends Seeder
      */
     public function run(): void
     {
+        LetterType::query()->delete();
         $types = [
             [
-                'name' => 'Surat Keterangan Sakit',
-                'description' => 'Surat keterangan istirahat karena kondisi kesehatan yang tidak memungkinkan untuk bekerja atau sekolah.',
+                'name' => 'SURAT KETERANGAN BERBADAN SEHAT / JASMANI',
+                'slug' => 'skbj',
+                'description' => 'Surat keterangan yang menyatakan kondisi kesehatan jasmani pasien dalam keadaan baik/sehat.',
                 'is_active' => true,
             ],
             [
-                'name' => 'Surat Keterangan Sehat',
-                'description' => 'Surat keterangan yang menyatakan kondisi kesehatan pasien dalam keadaan baik/sehat.',
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Surat Rujukan',
-                'description' => 'Surat pengantar untuk pemeriksaan lebih lanjut ke fasilitas kesehatan tingkat lanjut.',
+                'name' => 'SURAT KETERANGAN BEBAS NARKOBA',
+                'slug' => 'skbn',
+                'description' => 'Surat keterangan yang menyatakan bahwa pasien bebas dari penyalahgunaan narkoba berdasarkan hasil pemeriksaan urine.',
                 'is_active' => true,
             ],
         ];
 
         foreach ($types as $type) {
-            LetterType::create($type);
+            LetterType::updateOrCreate(
+                ['name' => $type['name']],
+                $type
+            );
         }
     }
 }

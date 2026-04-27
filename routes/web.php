@@ -50,8 +50,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 Route::get('/', [LetterRequestController::class, 'index'])->name('index');
                 Route::get('/{letterRequest}', [LetterRequestController::class, 'show'])->name('show');
                 Route::patch('/{letterRequest}/status', [LetterRequestController::class, 'updateStatus'])->name('update-status');
+                Route::patch('/{letterRequest}/pemeriksaan', [LetterRequestController::class, 'updatePemeriksaan'])->name('update-pemeriksaan');
                 Route::post('/{letterRequest}/upload-final', [LetterRequestController::class, 'uploadFinalLetter'])->name('upload-final');
                 Route::get('/{letterRequest}/print-skbn', [LetterRequestController::class, 'printSkbn'])->name('print-skbn');
+                Route::get('/{letterRequest}/print-skbj', [LetterRequestController::class, 'printSkbj'])->name('print-skbj');
+                Route::get('/{letterRequest}/download-word', [LetterRequestController::class, 'downloadWord'])->name('download-word');
             });
         });
 

@@ -28,8 +28,6 @@ Buka **Command Prompt** atau **Git Bash**, lalu jalankan perintah berikut:
 git clone https://github.com/suryawanabakti/rsb.git
 ```
 
-> Ganti `suryawanabakti/rsb` dengan URL repositori yang sebenarnya.
-
 Masuk ke folder proyek:
 
 ```bash

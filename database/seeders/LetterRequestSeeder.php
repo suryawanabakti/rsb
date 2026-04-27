@@ -18,13 +18,13 @@ class LetterRequestSeeder extends Seeder
         $budi = Patient::whereHas('user', fn($q) => $q->where('username', 'budi80'))->first();
         $siti = Patient::whereHas('user', fn($q) => $q->where('username', 'siti95'))->first();
 
-        $sakit = LetterType::where('name', 'Surat Keterangan Sakit')->first();
-        $sehat = LetterType::where('name', 'Surat Keterangan Sehat')->first();
+        $skbj = LetterType::where('slug', 'skbj')->first();
+        $skbn = LetterType::where('slug', 'skbn')->first();
 
-        if ($budi && $sakit) {
+        if ($budi && $skbj) {
             $request1 = LetterRequest::create([
                 'patient_id' => $budi->id,
-                'letter_type_id' => $sakit->id,
+                'letter_type_id' => $skbj->id,
                 'submission_date' => now()->subDays(2),
                 'status' => 'completed',
                 'admin_notes' => 'Sudah diproses, silakan ambil di loket.',
@@ -40,10 +40,10 @@ class LetterRequestSeeder extends Seeder
             ]);
         }
 
-        if ($siti && $sehat) {
+        if ($siti && $skbn) {
             $request2 = LetterRequest::create([
                 'patient_id' => $siti->id,
-                'letter_type_id' => $sehat->id,
+                'letter_type_id' => $skbn->id,
                 'submission_date' => now(),
                 'status' => 'submitted',
             ]);

@@ -26,6 +26,10 @@ class AuthService
             'address' => $data['address'],
             'birth_date' => $data['birth_date'],
             'gender' => $data['gender'],
+            'pangkat' => $data['pangkat'] ?? null,
+            'nrp_nip' => $data['nrp_nip'] ?? null,
+            'pendidikan_terakhir' => $data['pendidikan_terakhir'] ?? null,
+            'jabatan_kesatuan' => $data['jabatan_kesatuan'] ?? null,
         ]);
 
         $token = $user->createToken('mobile_token')->plainTextToken;
@@ -74,6 +78,10 @@ class AuthService
                     'address' => $data['address'],
                     'birth_date' => $data['birth_date'],
                     'gender' => $data['gender'],
+                    'pangkat' => $data['pangkat'] ?? $user->patient->pangkat,
+                    'nrp_nip' => $data['nrp_nip'] ?? $user->patient->nrp_nip,
+                    'pendidikan_terakhir' => $data['pendidikan_terakhir'] ?? $user->patient->pendidikan_terakhir,
+                    'jabatan_kesatuan' => $data['jabatan_kesatuan'] ?? $user->patient->jabatan_kesatuan,
                 ]);
             }
 

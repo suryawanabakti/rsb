@@ -121,6 +121,117 @@
                 </form>
             </div>
 
+            <!-- Examination Data Card -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-bold text-slate-900 text-lg flex items-center">
+                        <span class="mr-2">🔬</span> Data Hasil Pemeriksaan
+                    </h3>
+                </div>
+
+                <form action="{{ route('admin.letter-requests.update-pemeriksaan', $letterRequest->id) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+
+                    <div
+                        class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                        <div>
+                            <label class="block text-xs font-black text-indigo-400 uppercase tracking-widest mb-2">Pilih
+                                Dokter Pemeriksa (Tanda Tangan)</label>
+                            <select name="dokter_pemeriksa_id" required
+                                class="w-full px-4 py-3 rounded-lg border border-indigo-200 focus:border-indigo-500 outline-none text-sm font-bold bg-white">
+                                <option value="">-- Pilih Dokter --</option>
+                                @foreach ($doctors as $doc)
+                                    <option value="{{ $doc->id }}"
+                                        {{ ($letterRequest->dokter_pemeriksa_id ?? auth()->id()) == $doc->id ? 'selected' : '' }}>
+                                        {{ $doc->name }} (NRP: {{ $doc->nrp ?? '-' }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-indigo-400 uppercase tracking-widest mb-2">Nomor
+                                Surat</label>
+                            <input type="text" name="nomor_surat"
+                                value="{{ $letterRequest->nomor_surat ?? 'SKBN/' . $letterRequest->id . '/' . now()->format('m/Y') . '/Rumkit' }}"
+                                class="w-full px-4 py-3 rounded-lg border border-indigo-200 focus:border-indigo-500 outline-none text-sm font-bold bg-white"
+                                placeholder="Contoh: SKBN/123/04/2026/Rumkit">
+                        </div>
+                    </div>
+
+                    @if ($letterRequest->letterType->slug == 'skbn')
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            @php
+                                $parameters = [
+                                    'amp' => 'Amphetamin (AMP)',
+                                    'met' => 'Methamphetamin (MET)',
+                                    'mop' => 'Morphine (MOP)',
+                                    'thc' => 'Mariyuana (THC)',
+                                    'bzo' => 'Benzodiazepine (BZO)',
+                                    'coc' => 'Cocaine (COC)',
+                                ];
+                            @endphp
+                            @foreach ($parameters as $key => $label)
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{{ $label }}</label>
+                                    <select name="pemeriksaan_data[{{ $key }}]"
+                                        class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-bold {{ ($letterRequest->pemeriksaan_data[$key] ?? 'NEGATIF') == 'POSITIF' ? 'text-red-600' : 'text-blue-600' }}">
+                                        <option value="NEGATIF"
+                                            {{ ($letterRequest->pemeriksaan_data[$key] ?? 'NEGATIF') == 'NEGATIF' ? 'selected' : '' }}>
+                                            NEGATIF</option>
+                                        <option value="POSITIF"
+                                            {{ ($letterRequest->pemeriksaan_data[$key] ?? 'NEGATIF') == 'POSITIF' ? 'selected' : '' }}>
+                                            POSITIF</option>
+                                    </select>
+                                </div>
+                            @endforeach
+                        </div>
+                    @elseif($letterRequest->letterType->slug == 'skbj')
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">TD
+                                    (Tensi)</label>
+                                <div class="flex items-center">
+                                    <input type="text" name="pemeriksaan_data[td]"
+                                        value="{{ $letterRequest->pemeriksaan_data['td'] ?? '120/80' }}"
+                                        class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-bold">
+                                    <span class="ml-2 text-xs text-slate-400 font-bold">mmHg</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">TB
+                                    (Tinggi Badan)</label>
+                                <div class="flex items-center">
+                                    <input type="text" name="pemeriksaan_data[tb]"
+                                        value="{{ $letterRequest->pemeriksaan_data['tb'] ?? '164' }}"
+                                        class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-bold">
+                                    <span class="ml-2 text-xs text-slate-400 font-bold">CM</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">BB
+                                    (Berat Badan)</label>
+                                <div class="flex items-center">
+                                    <input type="text" name="pemeriksaan_data[bb]"
+                                        value="{{ $letterRequest->pemeriksaan_data['bb'] ?? '78' }}"
+                                        class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-bold">
+                                    <span class="ml-2 text-xs text-slate-400 font-bold">KG</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="mt-8 pt-6 border-t border-slate-100 flex justify-end">
+                        <button type="submit"
+                            class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105">
+                            💾 Simpan & Update Preview
+                        </button>
+                    </div>
+                </form>
+            </div>
+
             <!-- Attached Files -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
                 <h3 class="font-bold text-slate-900 text-lg mb-6 flex items-center">
@@ -169,17 +280,33 @@
         <!-- Actions Sidebar -->
         <div class="space-y-6">
             <!-- Print Button Section -->
-            @if (in_array($letterRequest->status, ['verified', 'approved', 'completed']))
-                <div class="bg-indigo-600 rounded-2xl shadow-xl p-6 text-white hidden">
-                    <h3 class="font-bold text-lg mb-4">Cetak Surat Resmi</h3>
-                    <p class="text-indigo-100 text-sm mb-6">Gunakan format profesional untuk mencetak surat ini langsung
-                        dari sistem.</p>
-                    <a href="{{ route('admin.letter-requests.print-skbn', $letterRequest->id) }}" target="_blank"
-                        class="block w-full text-center bg-white text-indigo-600 font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-indigo-50 transition-all duration-300">
-                        🖨️ Cetak SKBN
-                    </a>
-                </div>
-            @endif
+
+            <div class="bg-indigo-600 rounded-2xl shadow-xl p-6 text-white">
+                <h3 class="font-bold text-lg mb-4">Cetak Surat Resmi</h3>
+                <p class="text-indigo-100 text-sm mb-6">Gunakan format profesional untuk mencetak surat ini langsung
+                    dari sistem.</p>
+                @if ($letterRequest->letterType->slug == 'skbn')
+                    <div class="grid grid-cols-1 gap-2">
+                        <a href="{{ route('admin.letter-requests.download-word', $letterRequest->id) }}"
+                            class="text-center bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-indigo-400 transition-all duration-300">
+                            📝 Word
+                        </a>
+                    </div>
+                @elseif($letterRequest->letterType->slug == 'skbj')
+                    <div class="grid grid-cols-1 gap-2">
+                        <a href="{{ route('admin.letter-requests.download-word', $letterRequest->id) }}"
+                            class="text-center bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-indigo-400 transition-all duration-300">
+                            📝 Word
+                        </a>
+                    </div>
+                @else
+                    <button disabled
+                        class="block w-full text-center bg-slate-300 text-slate-500 font-bold py-3 px-4 rounded-xl cursor-not-allowed">
+                        Format Belum Tersedia
+                    </button>
+                @endif
+            </div>
+
 
             <!-- Final Letter Upload Section -->
             @if (in_array($letterRequest->status, ['approved', 'completed']))
