@@ -121,6 +121,23 @@
                 </form>
             </div>
 
+            <!-- Patient Request Details -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+                <h3 class="font-bold text-slate-900 text-lg mb-6 flex items-center">
+                    <span class="mr-2">📝</span> Detail Permohonan Pasien
+                </h3>
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Keperluan (Tujuan)</p>
+                        <p class="font-bold text-slate-900 bg-slate-50 p-4 rounded-xl border border-slate-100">{{ $letterRequest->keperluan ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Catatan Tambahan Pasien</p>
+                        <p class="text-slate-600 bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm italic">{{ $letterRequest->notes ?? '-' }}</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Examination Data Card -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
                 <div class="flex items-center justify-between mb-6">

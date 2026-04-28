@@ -18,6 +18,8 @@ class LetterRequest extends Model
         'submission_date',
         'status',
         'nomor_surat',
+        'keperluan',
+        'notes',
         'admin_notes',
         'pemeriksaan_data',
         'final_letter',

@@ -27,10 +27,10 @@
 
             <div class="mb-6">
                 <label for="files" class="block text-sm font-bold text-slate-700 mb-2">Dokumen Pendukung
-                    (PDF/Gambar)</label>
+                    (Optional - PDF/Gambar)</label>
                 <div class="relative border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition-colors cursor-pointer"
                     onclick="document.getElementById('files').click()">
-                    <input type="file" name="files[]" id="files" required accept=".pdf,.jpg,.jpeg,.png" multiple
+                    <input type="file" name="files[]" id="files" accept=".pdf,.jpg,.jpeg,.png" multiple
                         class="hidden" onchange="updateFileNames(this)">
                     <span class="text-3xl mb-2 block">📄</span>
                     <p class="text-sm font-bold text-slate-600">Klik untuk upload file</p>
@@ -52,6 +52,15 @@
                         'Bisa upload lebih dari satu file (Maks 5MB/file)';
                 }
             </script>
+
+            <div class="mb-6">
+                <label for="keperluan" class="block text-sm font-bold text-slate-700 mb-2">Keperluan (Tujuan)</label>
+                <textarea name="keperluan" id="keperluan" rows="2" required placeholder="Contoh: Assesment Jabatan Kapolres"
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none transition-all"></textarea>
+                @error('keperluan')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
             <div class="mb-8">
                 <label for="notes" class="block text-sm font-bold text-slate-700 mb-2">Catatan Tambahan

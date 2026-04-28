@@ -165,13 +165,15 @@ class LetterRequestController extends Controller
         // Header
         $headerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
         $row = $headerTable->addRow();
-        $cell = $row->addCell(8000);
+        $cell = $row->addCell(10000);
         $cell->addText('KEPOLISIAN DAERAH SULAWESI SELATAN', ['bold' => true, 'size' => 10]);
         $cell->addText('BIDANG KEDOKTERAN DAN KESEHATAN', ['bold' => true, 'size' => 10]);
         $cell->addText('RUMAH SAKIT BHAYANGKARA TK.II MAKASSAR', ['bold' => true, 'size' => 10]);
         $cell->addText('Jalan. Letjen Pol. Mappaoddang No. 63 Makassar', ['size' => 10]);
 
-        // Logo
+        $section->addTextBreak(1);
+
+        // Logo Centered
         $logoPath = public_path('images/logo-polisi.jpg');
         if (file_exists($logoPath)) {
             $section->addImage($logoPath, [
@@ -222,7 +224,7 @@ class LetterRequestController extends Controller
 
         $section->addText('Kesimpulan: Yang bersangkutan pada saat diperiksa dinyatakan: "BEBAS NARKOBA".---');
 
-        $section->addText('Keperluan Untuk   :   ' . strtoupper($letterRequest->admin_notes ?? 'ASSESMENT JABATAN KAPOLRES'), ['bold' => true]);
+        $section->addText('Keperluan Untuk   :   ' . strtoupper($letterRequest->keperluan ?? 'ASSESMENT JABATAN KAPOLRES'), ['bold' => true]);
 
         $section->addText('Demikian surat keterangan ini dibuat dengan sebenar-benarnya berdasarkan kompetensi dan sumpah dokter, serta dipergunakan hanya untuk sesuai keperluan. -------------------------');
 
@@ -242,13 +244,23 @@ class LetterRequestController extends Controller
         // Header
         $headerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
         $row = $headerTable->addRow();
-        $cell = $row->addCell(8000);
+        $cell = $row->addCell(10000);
         $cell->addText('KEPOLISIAN DAERAH SULAWESI SELATAN', ['bold' => true, 'size' => 10]);
         $cell->addText('BIDANG KEDOKTERAN DAN KESEHATAN', ['bold' => true, 'size' => 10]);
         $cell->addText('RUMAH SAKIT BHAYANGKARA TK.II MAKASSAR', ['bold' => true, 'size' => 10]);
         $cell->addText('Jalan. Letjen Pol. Mappaoddang No. 63 Makassar', ['italic' => true, 'size' => 9], ['borderBottomSize' => 6]);
 
         $section->addTextBreak(1);
+
+        // Logo Centered
+        $logoPath = public_path('images/logo-polisi.jpg');
+        if (file_exists($logoPath)) {
+            $section->addImage($logoPath, [
+                'width' => 50,
+                'height' => 50,
+                'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER
+            ]);
+        }
 
         // Title
         $section->addText('SURAT KETERANGAN BERBADAN SEHAT / JASMANI', ['bold' => true, 'size' => 14, 'underline' => 'single'], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
@@ -274,7 +286,7 @@ class LetterRequestController extends Controller
 
         $section->addTextBreak(1);
         $section->addText('Demikian surat keterangan ini dibuat dipergunakan untuk:');
-        $section->addText(strtoupper($letterRequest->admin_notes ?? 'ASSESMENT JABATAN KAPOLRES'), ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $section->addText(strtoupper($letterRequest->keperluan ?? 'ASSESMENT JABATAN KAPOLRES'), ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
 
         $section->addTextBreak(1);
         $footerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);

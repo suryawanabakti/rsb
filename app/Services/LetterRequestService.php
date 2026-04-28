@@ -15,6 +15,8 @@ class LetterRequestService
             $letterRequest = LetterRequest::create([
                 'patient_id' => $patientId,
                 'letter_type_id' => $data['letter_type_id'],
+                'keperluan' => $data['keperluan'] ?? null,
+                'notes' => $data['notes'] ?? null,
                 'submission_date' => now(),
                 'status' => 'submitted',
             ]);
