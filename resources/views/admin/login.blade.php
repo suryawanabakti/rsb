@@ -8,12 +8,12 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap');
 
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
+    body {
+        font-family: 'Lexend', sans-serif;
+    }
+</style>
 </head>
 
 <body class="bg-gray-50 flex items-center justify-center min-h-screen">

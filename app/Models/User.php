@@ -26,6 +26,7 @@ class User extends Authenticatable
         'role',
         'phone',
         'nrp',
+        'sip_number',
         'address',
         'sip_file',
         'photo',
