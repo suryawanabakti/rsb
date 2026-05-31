@@ -122,7 +122,7 @@
                             class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">NRP / NIP</label>
                         <input type="text" name="nrp_nip" id="nrp_nip" value="{{ old('nrp_nip') }}"
                             class="w-full px-5 py-3 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none text-sm font-medium"
-                            placeholder="86091922">
+                            placeholder="...">
                     </div>
 
                     <div>
@@ -138,7 +138,7 @@
                             class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Jabatan / Kesatuan</label>
                         <input type="text" name="jabatan_kesatuan" id="jabatan_kesatuan" value="{{ old('jabatan_kesatuan') }}"
                             class="w-full px-5 py-3 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none text-sm font-medium"
-                            placeholder="Contoh: GADIK KEPOLISIAN MUDA">
+                            placeholder="...">
                     </div>
 
                     <div class="md:col-span-2">
