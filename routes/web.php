@@ -25,6 +25,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/verify/{letterRequest}', [LetterRequestController::class, 'verifyQr'])->name('verify-qr');
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::get('/register', [\App\Http\Controllers\Pasien\RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [\App\Http\Controllers\Pasien\RegisterController::class, 'register'])->name('register.submit');
@@ -51,7 +54,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 Route::get('/{letterRequest}', [LetterRequestController::class, 'show'])->name('show');
                 Route::patch('/{letterRequest}/status', [LetterRequestController::class, 'updateStatus'])->name('update-status');
                 Route::patch('/{letterRequest}/pemeriksaan', [LetterRequestController::class, 'updatePemeriksaan'])->name('update-pemeriksaan');
-                Route::post('/{letterRequest}/upload-final', [LetterRequestController::class, 'uploadFinalLetter'])->name('upload-final');
                 Route::get('/{letterRequest}/print-skbn', [LetterRequestController::class, 'printSkbn'])->name('print-skbn');
                 Route::get('/{letterRequest}/print-skbj', [LetterRequestController::class, 'printSkbj'])->name('print-skbj');
                 Route::get('/{letterRequest}/download-word', [LetterRequestController::class, 'downloadWord'])->name('download-word');
@@ -117,6 +119,7 @@ Route::prefix('pasien')->name('pasien.')->middleware(['auth', 'role:pasien'])->g
         Route::get('/create', [PasienLetterRequestController::class, 'create'])->name('create');
         Route::post('/', [PasienLetterRequestController::class, 'store'])->name('store');
         Route::get('/{letterRequest}', [PasienLetterRequestController::class, 'show'])->name('show');
+        Route::get('/{letterRequest}/download-word', [PasienLetterRequestController::class, 'downloadWord'])->name('download-word');
     });
 
     Route::prefix('notifications')->name('notifications.')->group(function () {

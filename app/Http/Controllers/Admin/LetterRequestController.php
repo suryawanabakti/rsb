@@ -35,6 +35,7 @@ class LetterRequestController extends Controller
     {
         $letterRequest->load(['patient.user', 'letterType', 'files', 'dokterPemeriksa']);
         $doctors = \App\Models\User::where('role', 'dokter')->get();
+
         return view('admin.letter-requests.show', compact('letterRequest', 'doctors'));
     }
 
@@ -69,23 +70,6 @@ class LetterRequestController extends Controller
         ]);
 
         return back()->with('success', 'Data hasil pemeriksaan berhasil diperbarui.');
-    }
-
-    public function uploadFinalLetter(Request $request, LetterRequest $letterRequest)
-    {
-        $request->validate([
-            'final_letter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        ]);
-
-        if ($request->hasFile('final_letter')) {
-            $path = $request->file('final_letter')->store('final-letters', 'public');
-            $letterRequest->update([
-                'final_letter' => $path,
-                'status' => 'completed',
-            ]);
-        }
-
-        return back()->with('success', 'Surat final berhasil diunggah dan status diperbarui menjadi SELESAI.');
     }
 
     public function printSkbn(LetterRequest $letterRequest)
@@ -123,7 +107,7 @@ class LetterRequestController extends Controller
             ->latest()
             ->first();
 
-        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $phpWord = new \PhpOffice\PhpWord\PhpWord;
         $phpWord->setDefaultFontName('Times New Roman');
         $phpWord->setDefaultFontSize(11);
 
@@ -150,17 +134,17 @@ class LetterRequestController extends Controller
         }
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        $fileName = 'Surat_' . strtoupper($letterRequest->letterType->slug) . '_' . str_replace(' ', '_', $letterRequest->patient->user->name) . '.docx';
+        $fileName = 'Surat_'.strtoupper($letterRequest->letterType->slug).'_'.str_replace(' ', '_', $letterRequest->patient->user->name).'.docx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
         header('Cache-Control: max-age=0');
 
         $objWriter->save('php://output');
         exit;
     }
 
-    private function generateSkbnWord($section, $letterRequest, $labResults)
+    public function generateSkbnWord($section, $letterRequest, $labResults)
     {
         // Header
         $headerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
@@ -179,26 +163,26 @@ class LetterRequestController extends Controller
             $section->addImage($logoPath, [
                 'width' => 50,
                 'height' => 50,
-                'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER
+                'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
             ]);
         }
 
         // Title
         $section->addText('SURAT KETERANGAN BEBAS NARKOBA', ['bold' => true, 'size' => 14, 'underline' => 'single'], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $nomorSurat = $letterRequest->nomor_surat ?? ('SKBN/' . $letterRequest->id . '/' . now()->format('m/Y') . '/Rumkit');
-        $section->addText('Nomor: ' . $nomorSurat, [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $nomorSurat = $letterRequest->nomor_surat ?? ('SKBN/'.$letterRequest->id.'/'.now()->format('m/Y').'/Rumkit');
+        $section->addText('Nomor: '.$nomorSurat, [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
 
         $section->addText('Yang bertanda tangan di bawah ini, dokter Rumah Sakit Bhayangkara Makassar menerangkan bahwa:');
 
         $table = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
-        $this->addTableRow($table, 'Nama', ': ' . strtoupper($letterRequest->patient->user->name), true);
-        $this->addTableRow($table, 'Pangkat', ': ' . ($letterRequest->patient->pangkat ?? '-'));
-        $this->addTableRow($table, 'NRP / NIP', ': ' . ($letterRequest->patient->nrp_nip ?? '-'));
-        $this->addTableRow($table, 'Jenis Kelamin', ': ' . ($letterRequest->patient->gender == 'L' ? 'LAKI-LAKI' : 'PEREMPUAN'));
-        $this->addTableRow($table, 'Pendidikan Terakhir', ': ' . ($letterRequest->patient->pendidikan_terakhir ?? '-'));
-        $this->addTableRow($table, 'Jabatan / Kesatuan', ': ' . ($letterRequest->patient->jabatan_kesatuan ?? '-'));
-        $this->addTableRow($table, 'Alamat', ': ' . $letterRequest->patient->address);
-        $this->addTableRow($table, 'Waktu Pemeriksaan', ': ' . now()->translatedFormat('d F Y'), true);
+        $this->addTableRow($table, 'Nama', ': '.strtoupper($letterRequest->patient->user->name), true);
+        $this->addTableRow($table, 'Pangkat', ': '.($letterRequest->patient->pangkat ?? '-'));
+        $this->addTableRow($table, 'NRP / NIP', ': '.($letterRequest->patient->nrp_nip ?? '-'));
+        $this->addTableRow($table, 'Jenis Kelamin', ': '.($letterRequest->patient->gender == 'L' ? 'LAKI-LAKI' : 'PEREMPUAN'));
+        $this->addTableRow($table, 'Pendidikan Terakhir', ': '.($letterRequest->patient->pendidikan_terakhir ?? '-'));
+        $this->addTableRow($table, 'Jabatan / Kesatuan', ': '.($letterRequest->patient->jabatan_kesatuan ?? '-'));
+        $this->addTableRow($table, 'Alamat', ': '.$letterRequest->patient->address);
+        $this->addTableRow($table, 'Waktu Pemeriksaan', ': '.now()->translatedFormat('d F Y'), true);
 
         $section->addText('Hasil pemeriksaan kondisi kesehatan umum: "Tidak ada tanda-tanda kelainan fisik dan psikis terkait penyalahgunaan narkoba maupun ketergantungan (adiksi) dari zat-zat narkoba", disertai pemeriksaan urine memakai 6 (enam) uji parameter dengan hasil: -------');
 
@@ -209,22 +193,22 @@ class LetterRequestController extends Controller
             'mop' => 'c. Morphine (MOP)',
             'thc' => 'd. Mariyuana (THC)',
             'bzo' => 'e. Benzodiazepine (BZO)',
-            'coc' => 'f. Cocaine (COC)'
+            'coc' => 'f. Cocaine (COC)',
         ];
-        
+
         foreach ($params as $key => $label) {
             $value = ucfirst(strtolower($letterRequest->pemeriksaan_data[$key] ?? 'Negatif'));
             $row = $labTable->addRow();
             $row->addCell(3500)->addText($label);
-            
+
             // Add dots after the result
-            $resultText = ': ' . $value . '-------------------------------------------------------';
+            $resultText = ': '.$value.'-------------------------------------------------------';
             $row->addCell(6500)->addText($resultText);
         }
 
         $section->addText('Kesimpulan: Yang bersangkutan pada saat diperiksa dinyatakan: "BEBAS NARKOBA".---');
 
-        $section->addText('Keperluan Untuk   :   ' . strtoupper($letterRequest->keperluan ?? 'ASSESMENT JABATAN KAPOLRES'), ['bold' => true]);
+        $section->addText('Keperluan Untuk   :   '.strtoupper($letterRequest->keperluan ?? 'ASSESMENT JABATAN KAPOLRES'), ['bold' => true]);
 
         $section->addText('Demikian surat keterangan ini dibuat dengan sebenar-benarnya berdasarkan kompetensi dan sumpah dokter, serta dipergunakan hanya untuk sesuai keperluan. -------------------------');
 
@@ -232,14 +216,28 @@ class LetterRequestController extends Controller
         $row = $footerTable->addRow();
         $row->addCell(6000);
         $rightCell = $row->addCell(4000);
-        $rightCell->addText('Makassar, ' . now()->translatedFormat('d F Y'), [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $rightCell->addText('Makassar, '.now()->translatedFormat('d F Y'), [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
         $rightCell->addText('Dokter Pemeriksa', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $rightCell->addTextBreak(3);
+
+        // QR Code
+        $qrData = route('verify-qr', $letterRequest->id);
+        $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='.urlencode($qrData);
+        $tempFile = tempnam(sys_get_temp_dir(), 'qr_').'.png';
+        $qrContent = @file_get_contents($qrUrl);
+        if ($qrContent !== false) {
+            file_put_contents($tempFile, $qrContent);
+            $rightCell->addImage($tempFile, [
+                'width' => 60,
+                'height' => 60,
+                'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+            ]);
+        }
+
         $rightCell->addText($letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes', ['bold' => true, 'underline' => 'single'], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $rightCell->addText('AKBP NRP ' . ($letterRequest->dokterPemeriksa->nrp ?? '74030679'), ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $rightCell->addText('AKBP NRP '.($letterRequest->dokterPemeriksa->nrp ?? '74030679'), ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
     }
 
-    private function generateSkbjWord($section, $letterRequest, $labResults)
+    public function generateSkbjWord($section, $letterRequest, $labResults)
     {
         // Header
         $headerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
@@ -258,27 +256,27 @@ class LetterRequestController extends Controller
             $section->addImage($logoPath, [
                 'width' => 50,
                 'height' => 50,
-                'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER
+                'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
             ]);
         }
 
         // Title
         $section->addText('SURAT KETERANGAN BERBADAN SEHAT / JASMANI', ['bold' => true, 'size' => 14, 'underline' => 'single'], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $nomorSurat = $letterRequest->nomor_surat ?? ('SKBJ/' . $letterRequest->id . '/' . now()->format('m/Y') . '/Rumkit');
-        $section->addText('Nomor: ' . $nomorSurat, [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $nomorSurat = $letterRequest->nomor_surat ?? ('SKBJ/'.$letterRequest->id.'/'.now()->format('m/Y').'/Rumkit');
+        $section->addText('Nomor: '.$nomorSurat, [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
 
         $section->addTextBreak(1);
         $section->addText('Yang bertanda tangan di bawah ini, dokter Rumah Sakit Bhayangkara Makassar menerangkan bahwa:');
 
         $section->addTextBreak(1);
         $table = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
-        $this->addTableRow($table, 'Nama', ': ' . strtoupper($letterRequest->patient->user->name), true);
-        $this->addTableRow($table, 'Pangkat', ': ' . ($letterRequest->patient->pangkat ?? '-'));
-        $this->addTableRow($table, 'NRP / NIP', ': ' . ($letterRequest->patient->nrp_nip ?? '-'));
-        $this->addTableRow($table, 'Jenis Kelamin', ': ' . ($letterRequest->patient->gender == 'L' ? 'LAKI-LAKI' : 'PEREMPUAN'));
-        $this->addTableRow($table, 'Pendidikan Terakhir', ': ' . ($letterRequest->patient->pendidikan_terakhir ?? '-'));
-        $this->addTableRow($table, 'Jabatan / Kesatuan', ': ' . ($letterRequest->patient->jabatan_kesatuan ?? '-'));
-        $this->addTableRow($table, 'Alamat', ': ' . $letterRequest->patient->address);
+        $this->addTableRow($table, 'Nama', ': '.strtoupper($letterRequest->patient->user->name), true);
+        $this->addTableRow($table, 'Pangkat', ': '.($letterRequest->patient->pangkat ?? '-'));
+        $this->addTableRow($table, 'NRP / NIP', ': '.($letterRequest->patient->nrp_nip ?? '-'));
+        $this->addTableRow($table, 'Jenis Kelamin', ': '.($letterRequest->patient->gender == 'L' ? 'LAKI-LAKI' : 'PEREMPUAN'));
+        $this->addTableRow($table, 'Pendidikan Terakhir', ': '.($letterRequest->patient->pendidikan_terakhir ?? '-'));
+        $this->addTableRow($table, 'Jabatan / Kesatuan', ': '.($letterRequest->patient->jabatan_kesatuan ?? '-'));
+        $this->addTableRow($table, 'Alamat', ': '.$letterRequest->patient->address);
 
         $section->addTextBreak(1);
         $section->addText('Yang bersangkutan tersebut di atas telah diperiksa dan dinyatakan:');
@@ -291,23 +289,53 @@ class LetterRequestController extends Controller
         $section->addTextBreak(1);
         $footerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
         $row = $footerTable->addRow();
-        
+
         // Physical stats on left
         $leftCell = $row->addCell(5000);
-        $leftCell->addText('TD : ' . ($letterRequest->pemeriksaan_data['td'] ?? '120/80') . ' mmHg', ['bold' => true]);
-        $leftCell->addText('TB : ' . ($letterRequest->pemeriksaan_data['tb'] ?? '164') . ' CM', ['bold' => true]);
-        $leftCell->addText('BB : ' . ($letterRequest->pemeriksaan_data['bb'] ?? '78') . ' KG', ['bold' => true]);
+        $leftCell->addText('TD : '.($letterRequest->pemeriksaan_data['td'] ?? '120/80').' mmHg', ['bold' => true]);
+        $leftCell->addText('TB : '.($letterRequest->pemeriksaan_data['tb'] ?? '164').' CM', ['bold' => true]);
+        $leftCell->addText('BB : '.($letterRequest->pemeriksaan_data['bb'] ?? '78').' KG', ['bold' => true]);
 
         // Signature on right
         $rightCell = $row->addCell(5000);
-        $rightCell->addText('Makassar, ' . now()->translatedFormat('d F Y'), [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $rightCell->addText('Makassar, '.now()->translatedFormat('d F Y'), [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
         $rightCell->addText('Dokter yang memeriksa', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $rightCell->addTextBreak(3);
+
+        // QR Code
+        $qrData = route('verify-qr', $letterRequest->id);
+        $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='.urlencode($qrData);
+        $tempFile = tempnam(sys_get_temp_dir(), 'qr_').'.png';
+        $qrContent = @file_get_contents($qrUrl);
+        if ($qrContent !== false) {
+            file_put_contents($tempFile, $qrContent);
+            $rightCell->addImage($tempFile, [
+                'width' => 60,
+                'height' => 60,
+                'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+            ]);
+        }
+
         $rightCell->addText($letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes', ['bold' => true, 'underline' => 'single'], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $rightCell->addText('AKBP NRP ' . ($letterRequest->dokterPemeriksa->nrp ?? '74030679'), ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $rightCell->addText('AKBP NRP '.($letterRequest->dokterPemeriksa->nrp ?? '74030679'), ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
     }
 
-    private function addTableRow($table, $label, $value, $bold = false)
+    public function verifyQr(LetterRequest $letterRequest)
+    {
+        if (in_array($letterRequest->status, ['approved', 'completed'])) {
+            $letterRequest->load(['patient.user', 'letterType', 'dokterPemeriksa']);
+
+            if ($letterRequest->letterType->slug == 'skbn') {
+                return view('public.verify-skbn', compact('letterRequest'));
+            } else {
+                return view('public.verify-skbj', compact('letterRequest'));
+            }
+        } else {
+            return abort(404);
+        }
+
+    }
+
+    public function addTableRow($table, $label, $value, $bold = false)
     {
         $row = $table->addRow();
         $row->addCell(3000)->addText($label, ['bold' => $bold]);

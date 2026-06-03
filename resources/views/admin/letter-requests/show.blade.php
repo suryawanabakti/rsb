@@ -277,21 +277,6 @@
                 </div>
             </div>
 
-            <!-- Final Letter Section -->
-            @if ($letterRequest->final_letter)
-                <div class="bg-emerald-50 rounded-2xl border border-emerald-100 p-8">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="font-bold text-emerald-900 text-lg flex items-center">
-                            <span class="mr-2">✅</span> Surat Final (Tersedia)
-                        </h3>
-                        <a href="{{ asset('storage/' . $letterRequest->final_letter) }}" target="_blank"
-                            class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all">
-                            Lihat Surat Final
-                        </a>
-                    </div>
-                    <p class="text-emerald-700 text-sm">Surat ini telah diunggah dan dapat diunduh oleh pasien.</p>
-                </div>
-            @endif
         </div>
 
         <!-- Actions Sidebar -->
@@ -325,27 +310,6 @@
             </div>
 
 
-            <!-- Final Letter Upload Section -->
-            @if (in_array($letterRequest->status, ['approved', 'completed']))
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                    <h3 class="font-bold text-slate-900 text-lg mb-4">Unggah Surat Final</h3>
-                    <form action="{{ route('admin.letter-requests.upload-final', $letterRequest->id) }}" method="POST"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-4">
-                            <p class="text-xs text-slate-500 mb-3">Unggah dokumen yang sudah ditandatangani dan dicap
-                                (PDF/JPG/PNG).</p>
-                            <input type="file" name="final_letter" required
-                                class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        </div>
-                        <button type="submit"
-                            class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 px-4 rounded-xl transition-all duration-300">
-                            Unggah & Selesaikan
-                        </button>
-                    </form>
-                </div>
-            @endif
-
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
                 <h3 class="font-bold text-slate-900 text-lg mb-4">Aksi Admin</h3>
                 <form action="{{ route('admin.letter-requests.update-status', $letterRequest->id) }}" method="POST">
@@ -360,11 +324,6 @@
                                 Verifikasi Berkas</option>
                             <option value="approved" {{ $letterRequest->status == 'approved' ? 'selected' : '' }}>Setujui
                                 (Diproses)</option>
-                            @if ($letterRequest->final_letter)
-                                <option value="completed" {{ $letterRequest->status == 'completed' ? 'selected' : '' }}>
-                                    Selesai
-                                </option>
-                            @endif
                             <option value="rejected" {{ $letterRequest->status == 'rejected' ? 'selected' : '' }}>Tolak
                                 Permohonan</option>
                         </select>

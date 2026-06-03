@@ -63,11 +63,6 @@
                 <span class="font-semibold text-sm">Dashboard</span>
             </a>
 
-            <a href="{{ route('pasien.lab-results.index') }}"
-                class="flex items-center px-4 py-3 rounded-xl transition-all group {{ request()->routeIs('pasien.lab-results.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                <span class="text-lg mr-3 group-hover:scale-110 transition-transform">🧪</span>
-                <span class="font-semibold text-sm">Hasil Lab</span>
-            </a>
 
             <a href="{{ route('pasien.letter-requests.index') }}"
                 class="flex items-center px-4 py-3 rounded-xl transition-all group {{ request()->routeIs('pasien.letter-requests.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">

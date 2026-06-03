@@ -83,7 +83,7 @@
             <div
                 class="qr-code-placeholder w-24 h-24 border border-slate-200 flex items-center justify-center text-[10px] text-slate-400 text-center p-2">
                 @php
-                    $qrData = route('pasien.letter-requests.show', $letterRequest->id);
+                    $qrData = route('verify-qr', $letterRequest->id);
                 @endphp
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($qrData) }}"
                     alt="QR Code" class="w-full h-full">

@@ -57,4 +57,60 @@ class LetterRequestController extends Controller
 
         return view('pasien.letter-requests.show', compact('letterRequest'));
     }
+
+    public function downloadWord($id)
+    {
+        $patient = Auth::user()->patient;
+        $letterRequest = $this->letterRequestService->getRequestDetails($id, $patient->id);
+
+        if (!$letterRequest) {
+            abort(404);
+        }
+
+        $letterRequest->load(['patient.user', 'letterType', 'dokterPemeriksa']);
+
+        $labResults = \App\Models\LabResult::where('letter_request_id', $letterRequest->id)
+            ->orWhere('patient_id', $letterRequest->patient_id)
+            ->with('validator')
+            ->latest()
+            ->first();
+
+        $adminController = app(\App\Http\Controllers\Admin\LetterRequestController::class);
+
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $phpWord->setDefaultFontName('Times New Roman');
+        $phpWord->setDefaultFontSize(11);
+
+        $section = $phpWord->addSection([
+            'paperSize' => 'Legal',
+            'marginTop' => 600,
+            'marginBottom' => 600,
+            'marginLeft' => 600,
+            'marginRight' => 600,
+            'borderTopSize' => 12,
+            'borderTopColor' => '000000',
+            'borderBottomSize' => 12,
+            'borderBottomColor' => '000000',
+            'borderLeftSize' => 12,
+            'borderLeftColor' => '000000',
+            'borderRightSize' => 12,
+            'borderRightColor' => '000000',
+        ]);
+
+        if ($letterRequest->letterType->slug == 'skbn') {
+            $adminController->generateSkbnWord($section, $letterRequest, $labResults);
+        } else {
+            $adminController->generateSkbjWord($section, $letterRequest, $labResults);
+        }
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $fileName = 'Surat_' . strtoupper($letterRequest->letterType->slug) . '_' . str_replace(' ', '_', $letterRequest->patient->user->name) . '.docx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit;
+    }
 }

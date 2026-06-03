@@ -51,7 +51,7 @@ class LetterRequestService
     {
         return LetterRequest::where('id', $id)
             ->where('patient_id', $patientId)
-            ->with(['letterType', 'files', 'processor'])
+            ->with(['letterType', 'files', 'processor', 'dokterPemeriksa'])
             ->first();
     }
 }

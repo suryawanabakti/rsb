@@ -65,19 +65,13 @@
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.dokters.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                     <span class="mr-3">👨‍⚕️</span> Data Dokter
                 </a>
-                <a href="{{ route('admin.petugas-labs.index') }}"
-                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.petugas-labs.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                    <span class="mr-3">🧪</span> Data Petugas Lab
-                </a>
+               
             @elseif($role === 'petugas_lab')
                 <a href="{{ route('petugas-lab.dashboard') }}"
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('petugas-lab.dashboard') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                     <span class="mr-3">📊</span> Dashboard
                 </a>
-                <a href="{{ route('petugas-lab.lab-results.index') }}"
-                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('petugas-lab.lab-results.*') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                    <span class="mr-3">🔬</span> Hasil Pemeriksaan
-                </a>
+ 
                 <a href="{{ route('petugas-lab.lab-results.create') }}"
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('petugas-lab.lab-results.create') ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                     <span class="mr-3">➕</span> Input Hasil Baru
@@ -91,10 +85,7 @@
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.letter-requests.*') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                     <span class="mr-3">✉️</span> Permohonan Surat
                 </a>
-                <a href="{{ route('dokter.lab-results.index') }}"
-                    class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dokter.lab-results.*') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                    <span class="mr-3">🧪</span> Validasi Hasil Lab
-                </a>
+              
                 <a href="{{ route('dokter.schedules.index') }}"
                     class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dokter.schedules.*') ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                     <span class="mr-3">📅</span> Jadwal Praktik
