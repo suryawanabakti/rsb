@@ -87,19 +87,29 @@
 
                 <!-- Doctor Signature -->
                 <div class="border-t border-slate-100 pt-6">
-                    <div class="text-center max-w-sm mx-auto">
-                        <p class="text-xs text-slate-500 mb-1">Makassar, {{ now()->translatedFormat('d F Y') }}</p>
-                        <p class="text-sm font-bold text-slate-700 mb-4">Dokter Pemeriksa</p>
-                        <div class="w-20 h-20 mx-auto mb-3 p-1 border border-slate-200 rounded-xl">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(route('verify-qr', $letterRequest->id)) }}"
-                                alt="QR" class="w-full h-full">
+                    <div class="max-w-sm mx-auto">
+                        <div class="flex items-start space-x-4">
+                            @if ($letterRequest->photo_4x6_url)
+                                <div class="flex-shrink-0">
+                                    <img src="{{ $letterRequest->photo_4x6_url }}" alt="Pas Foto 4x6"
+                                        class="w-16 h-20 object-cover rounded-lg border-2 border-slate-200 shadow-sm">
+                                </div>
+                            @endif
+                            <div class="flex-grow text-center">
+                                <p class="text-xs text-slate-500 mb-1">Makassar, {{ now()->translatedFormat('d F Y') }}</p>
+                                <p class="text-sm font-bold text-slate-700 mb-4">Dokter Pemeriksa</p>
+                                <div class="w-20 h-20 mx-auto mb-3 p-1 border border-slate-200 rounded-xl">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(route('verify-qr', $letterRequest->id)) }}"
+                                        alt="QR" class="w-full h-full">
+                                </div>
+                                <p class="text-base font-extrabold text-slate-900 underline decoration-2 decoration-emerald-500/30 underline-offset-4">
+                                    {{ $letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes' }}
+                                </p>
+                                <p class="text-sm font-bold text-slate-600">
+                                    AKBP NRP {{ $letterRequest->dokterPemeriksa->nrp ?? '74030679' }}
+                                </p>
+                            </div>
                         </div>
-                        <p class="text-base font-extrabold text-slate-900 underline decoration-2 decoration-emerald-500/30 underline-offset-4">
-                            {{ $letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes' }}
-                        </p>
-                        <p class="text-sm font-bold text-slate-600">
-                            AKBP NRP {{ $letterRequest->dokterPemeriksa->nrp ?? '74030679' }}
-                        </p>
                     </div>
                 </div>
 

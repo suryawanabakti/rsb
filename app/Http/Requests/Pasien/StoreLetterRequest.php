@@ -16,8 +16,9 @@ class StoreLetterRequest extends FormRequest
         return [
             'letter_type_id' => 'required|exists:letter_types,id',
             'keperluan' => 'required|string|max:255',
+            'photo_4x6' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'files' => 'nullable|array',
-            'files.*' => 'file|mimes:jpg,jpeg,png,pdf|max:5120', // Max 5MB per file
+            'files.*' => 'file|mimes:jpg,jpeg,png,pdf|max:5120',
             'notes' => 'nullable|string',
         ];
     }
@@ -27,6 +28,10 @@ class StoreLetterRequest extends FormRequest
         return [
             'letter_type_id.required' => 'Jenis surat harus dipilih.',
             'letter_type_id.exists' => 'Jenis surat tidak valid.',
+            'photo_4x6.required' => 'Pas foto 4x6 wajib diupload.',
+            'photo_4x6.image' => 'Pas foto harus berupa gambar.',
+            'photo_4x6.mimes' => 'Format pas foto harus JPG, JPEG, atau PNG.',
+            'photo_4x6.max' => 'Ukuran pas foto maksimal 2MB.',
             'files.array' => 'Format dokumen tidak valid.',
             'files.*.file' => 'File harus berupa dokumen atau gambar.',
             'files.*.mimes' => 'Format file harus JPG, JPEG, PNG, atau PDF.',

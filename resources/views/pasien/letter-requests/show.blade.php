@@ -49,6 +49,19 @@
                 </div>
             </div>
 
+            <!-- Pas Foto -->
+            @if ($letterRequest->photo_4x6_url)
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+                    <div class="p-6 border-b border-slate-100">
+                        <h3 class="font-bold text-slate-900 text-lg">Pas Foto 4x6</h3>
+                    </div>
+                    <div class="p-6 flex justify-center">
+                        <img src="{{ $letterRequest->photo_4x6_url }}" alt="Pas Foto 4x6"
+                            class="w-36 h-48 object-cover rounded-xl border-2 border-slate-200 shadow-md">
+                    </div>
+                </div>
+            @endif
+
             <!-- Documents -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
                 <div class="p-6 border-b border-slate-100">

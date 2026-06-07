@@ -61,13 +61,20 @@ class LetterRequestController extends Controller
 
     public function updatePemeriksaan(Request $request, LetterRequest $letterRequest)
     {
-        $letterRequest->update([
+        $data = [
             'pemeriksaan_data' => $request->pemeriksaan_data,
             'dokter_pemeriksa_id' => $request->dokter_pemeriksa_id,
             'nomor_surat' => $request->nomor_surat,
             'processed_by' => auth()->id(),
             'processed_at' => now(),
-        ]);
+        ];
+
+        if ($request->hasFile('photo_4x6')) {
+            $request->validate(['photo_4x6' => 'image|mimes:jpg,jpeg,png|max:2048']);
+            $data['photo_4x6'] = $request->file('photo_4x6')->store('photos-4x6', 'public');
+        }
+
+        $letterRequest->update($data);
 
         return back()->with('success', 'Data hasil pemeriksaan berhasil diperbarui.');
     }
@@ -219,22 +226,74 @@ class LetterRequestController extends Controller
         $rightCell->addText('Makassar, '.now()->translatedFormat('d F Y'), [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
         $rightCell->addText('Dokter Pemeriksa', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
 
-        // QR Code
+        // Generate QR
         $qrData = route('verify-qr', $letterRequest->id);
         $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='.urlencode($qrData);
         $tempFile = tempnam(sys_get_temp_dir(), 'qr_').'.png';
         $qrContent = @file_get_contents($qrUrl);
         if ($qrContent !== false) {
             file_put_contents($tempFile, $qrContent);
-            $rightCell->addImage($tempFile, [
-                'width' => 60,
-                'height' => 60,
+        }
+
+        // Foto + QR sejajar dengan QR di tengah (pas di atas nama dokter)
+        $mediaTable = $rightCell->addTable([
+            'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+        ]);
+
+        $mediaRow = $mediaTable->addRow();
+
+        // 1. FOTO KIRI
+        $photoCell = $mediaRow->addCell(2000);
+
+        if ($letterRequest->photo_4x6) {
+            $photoPath = storage_path('app/public/'.$letterRequest->photo_4x6);
+            if (file_exists($photoPath)) {
+                $photoCell->addImage($photoPath, [
+                    'width' => 70,
+                    'height' => 90,
+                    'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+                ]);
+            }
+        }
+
+        // 2. QR DI TENGAH
+        $qrCell = $mediaRow->addCell(2000);
+
+        if ($qrContent !== false) {
+            $qrCell->addImage($tempFile, [
+                'width' => 80,
+                'height' => 80,
                 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+                'spaceAfter' => 0,
+                'spaceBefore' => 0,
             ]);
         }
 
-        $rightCell->addText($letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes', ['bold' => true, 'underline' => 'single'], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $rightCell->addText('AKBP NRP '.($letterRequest->dokterPemeriksa->nrp ?? '74030679'), ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        // 3. SPACER KANAN (agar QR Code pas di tengah-tengah tanda tangan)
+        $mediaRow->addCell(2000);
+
+        $paragraphStyle = [
+            'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+            'spaceAfter' => 0,
+            'spaceBefore' => 0,
+        ];
+
+        $rightCell->addText(
+            $letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes',
+            [
+                'bold' => true,
+                'underline' => 'single',
+            ],
+            $paragraphStyle
+        );
+
+        $rightCell->addText(
+            'AKBP NRP '.($letterRequest->dokterPemeriksa->nrp ?? '74030679'),
+            [
+                'bold' => true,
+            ],
+            $paragraphStyle
+        );
     }
 
     public function generateSkbjWord($section, $letterRequest, $labResults)
@@ -246,11 +305,15 @@ class LetterRequestController extends Controller
         $cell->addText('KEPOLISIAN DAERAH SULAWESI SELATAN', ['bold' => true, 'size' => 10]);
         $cell->addText('BIDANG KEDOKTERAN DAN KESEHATAN', ['bold' => true, 'size' => 10]);
         $cell->addText('RUMAH SAKIT BHAYANGKARA TK.II MAKASSAR', ['bold' => true, 'size' => 10]);
-        $cell->addText('Jalan. Letjen Pol. Mappaoddang No. 63 Makassar', ['italic' => true, 'size' => 9], ['borderBottomSize' => 6]);
+        $cell->addText(
+            'Jalan. Letjen Pol. Mappaoddang No. 63 Makassar',
+            ['italic' => true, 'size' => 9],
+            ['borderBottomSize' => 6]
+        );
 
         $section->addTextBreak(1);
 
-        // Logo Centered
+        // Logo
         $logoPath = public_path('images/logo-polisi.jpg');
         if (file_exists($logoPath)) {
             $section->addImage($logoPath, [
@@ -260,16 +323,41 @@ class LetterRequestController extends Controller
             ]);
         }
 
-        // Title
-        $section->addText('SURAT KETERANGAN BERBADAN SEHAT / JASMANI', ['bold' => true, 'size' => 14, 'underline' => 'single'], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $nomorSurat = $letterRequest->nomor_surat ?? ('SKBJ/'.$letterRequest->id.'/'.now()->format('m/Y').'/Rumkit');
-        $section->addText('Nomor: '.$nomorSurat, [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        // Judul
+        $section->addText(
+            'SURAT KETERANGAN BERBADAN SEHAT / JASMANI',
+            [
+                'bold' => true,
+                'size' => 14,
+                'underline' => 'single',
+            ],
+            [
+                'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+            ]
+        );
+
+        $nomorSurat = $letterRequest->nomor_surat
+            ?? ('SKBJ/'.$letterRequest->id.'/'.now()->format('m/Y').'/Rumkit');
+
+        $section->addText(
+            'Nomor: '.$nomorSurat,
+            [],
+            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
+        );
 
         $section->addTextBreak(1);
-        $section->addText('Yang bertanda tangan di bawah ini, dokter Rumah Sakit Bhayangkara Makassar menerangkan bahwa:');
+
+        $section->addText(
+            'Yang bertanda tangan di bawah ini, dokter Rumah Sakit Bhayangkara Makassar menerangkan bahwa:'
+        );
 
         $section->addTextBreak(1);
-        $table = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
+
+        $table = $section->addTable([
+            'width' => 100 * 50,
+            'unit' => 'pct',
+        ]);
+
         $this->addTableRow($table, 'Nama', ': '.strtoupper($letterRequest->patient->user->name), true);
         $this->addTableRow($table, 'Pangkat', ': '.($letterRequest->patient->pangkat ?? '-'));
         $this->addTableRow($table, 'NRP / NIP', ': '.($letterRequest->patient->nrp_nip ?? '-'));
@@ -279,44 +367,146 @@ class LetterRequestController extends Controller
         $this->addTableRow($table, 'Alamat', ': '.$letterRequest->patient->address);
 
         $section->addTextBreak(1);
-        $section->addText('Yang bersangkutan tersebut di atas telah diperiksa dan dinyatakan:');
-        $section->addText('==================== BERBADAN SEHAT ====================', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+
+        $section->addText(
+            'Yang bersangkutan tersebut di atas telah diperiksa dan dinyatakan:'
+        );
+
+        $section->addText(
+            '==================== BERBADAN SEHAT ====================',
+            ['bold' => true],
+            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
+        );
 
         $section->addTextBreak(1);
-        $section->addText('Demikian surat keterangan ini dibuat dipergunakan untuk:');
-        $section->addText(strtoupper($letterRequest->keperluan ?? 'ASSESMENT JABATAN KAPOLRES'), ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+
+        $section->addText(
+            'Demikian surat keterangan ini dibuat dipergunakan untuk:'
+        );
+
+        $section->addText(
+            strtoupper($letterRequest->keperluan ?? 'ASSESMENT JABATAN KAPOLRES'),
+            ['bold' => true],
+            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
+        );
 
         $section->addTextBreak(1);
-        $footerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
+
+        // Footer
+        $footerTable = $section->addTable([
+            'width' => 100 * 50,
+            'unit' => 'pct',
+        ]);
+
         $row = $footerTable->addRow();
 
-        // Physical stats on left
+        // Kiri
         $leftCell = $row->addCell(5000);
-        $leftCell->addText('TD : '.($letterRequest->pemeriksaan_data['td'] ?? '120/80').' mmHg', ['bold' => true]);
-        $leftCell->addText('TB : '.($letterRequest->pemeriksaan_data['tb'] ?? '164').' CM', ['bold' => true]);
-        $leftCell->addText('BB : '.($letterRequest->pemeriksaan_data['bb'] ?? '78').' KG', ['bold' => true]);
 
-        // Signature on right
+        $leftCell->addText(
+            'TD : '.($letterRequest->pemeriksaan_data['td'] ?? '120/80').' mmHg',
+            ['bold' => true]
+        );
+
+        $leftCell->addText(
+            'TB : '.($letterRequest->pemeriksaan_data['tb'] ?? '164').' CM',
+            ['bold' => true]
+        );
+
+        $leftCell->addText(
+            'BB : '.($letterRequest->pemeriksaan_data['bb'] ?? '78').' KG',
+            ['bold' => true]
+        );
+
+        // Kanan
         $rightCell = $row->addCell(5000);
-        $rightCell->addText('Makassar, '.now()->translatedFormat('d F Y'), [], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $rightCell->addText('Dokter yang memeriksa', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
 
-        // QR Code
+        $rightCell->addText(
+            'Makassar, '.now()->translatedFormat('d F Y'),
+            [],
+            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
+        );
+
+        $rightCell->addText(
+            'Dokter yang memeriksa',
+            ['bold' => true],
+            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
+        );
+
+        // Generate QR
         $qrData = route('verify-qr', $letterRequest->id);
         $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='.urlencode($qrData);
+
         $tempFile = tempnam(sys_get_temp_dir(), 'qr_').'.png';
         $qrContent = @file_get_contents($qrUrl);
+
         if ($qrContent !== false) {
             file_put_contents($tempFile, $qrContent);
-            $rightCell->addImage($tempFile, [
-                'width' => 60,
-                'height' => 60,
+        }
+
+        // Foto + QR sejajar dengan QR di tengah (pas di atas nama dokter)
+        $mediaTable = $rightCell->addTable([
+            'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+        ]);
+
+        $mediaRow = $mediaTable->addRow();
+
+        // 1. FOTO KIRI
+        $photoCell = $mediaRow->addCell(2000);
+
+        if ($letterRequest->photo_4x6) {
+
+            $photoPath = storage_path('app/public/'.$letterRequest->photo_4x6);
+
+            if (file_exists($photoPath)) {
+                $photoCell->addImage($photoPath, [
+                    'width' => 70,
+                    'height' => 90,
+                    'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+                ]);
+            }
+        }
+
+        // 2. QR DI TENGAH
+        $qrCell = $mediaRow->addCell(2000);
+
+        if ($qrContent !== false) {
+            $qrCell->addImage($tempFile, [
+                'width' => 80,
+                'height' => 80,
                 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+                'spaceAfter' => 0,
+                'spaceBefore' => 0,
             ]);
         }
 
-        $rightCell->addText($letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes', ['bold' => true, 'underline' => 'single'], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
-        $rightCell->addText('AKBP NRP '.($letterRequest->dokterPemeriksa->nrp ?? '74030679'), ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        // 3. SPACER KANAN (agar QR Code pas di tengah-tengah tanda tangan)
+        $mediaRow->addCell(2000);
+
+      
+
+        $paragraphStyle = [
+            'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+            'spaceAfter' => 0,
+            'spaceBefore' => 0,
+        ];
+
+        $rightCell->addText(
+            $letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes',
+            [
+                'bold' => true,
+                'underline' => 'single',
+            ],
+            $paragraphStyle
+        );
+
+        $rightCell->addText(
+            'AKBP NRP '.($letterRequest->dokterPemeriksa->nrp ?? '74030679'),
+            [
+                'bold' => true,
+            ],
+            $paragraphStyle
+        );
     }
 
     public function verifyQr(LetterRequest $letterRequest)

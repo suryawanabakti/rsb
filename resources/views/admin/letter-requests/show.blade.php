@@ -146,12 +146,34 @@
                     </h3>
                 </div>
 
-                <form action="{{ route('admin.letter-requests.update-pemeriksaan', $letterRequest->id) }}" method="POST">
+                <form action="{{ route('admin.letter-requests.update-pemeriksaan', $letterRequest->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
 
                     <div
                         class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                        <div class="md:col-span-2 flex items-start space-x-4">
+                            <div class="flex-shrink-0">
+                                <label class="block text-xs font-black text-indigo-400 uppercase tracking-widest mb-2">Pas Foto 4x6</label>
+                                @if ($letterRequest->photo_4x6_url)
+                                    <img src="{{ $letterRequest->photo_4x6_url }}" alt="Pas Foto 4x6"
+                                        class="w-24 h-32 object-cover rounded-lg border-2 border-indigo-200 shadow-sm">
+                                @else
+                                    <div class="w-24 h-32 bg-indigo-100 rounded-lg border-2 border-dashed border-indigo-300 flex items-center justify-center">
+                                        <span class="text-[10px] text-indigo-400 font-bold text-center px-1">Belum ada foto</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-grow">
+                                <label class="block text-xs font-black text-indigo-400 uppercase tracking-widest mb-2">Upload / Ganti Pas Foto</label>
+                                <input type="file" name="photo_4x6" accept=".jpg,.jpeg,.png"
+                                    class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200">
+                                <p class="text-[10px] text-indigo-300 mt-1">Format JPG/PNG, Maks 2MB</p>
+                                @error('photo_4x6')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
                         <div>
                             <label class="block text-xs font-black text-indigo-400 uppercase tracking-widest mb-2">Pilih
                                 Dokter Pemeriksa (Tanda Tangan)</label>
@@ -358,6 +380,21 @@
                         <div>
                             <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Diproses Pada</p>
                             <p class="font-bold">{{ $letterRequest->processed_at }}</p>
+                        </div>
+                    @endif
+                    @if ($letterRequest->dokterPemeriksa)
+                        <div class="pt-4 border-t border-slate-700">
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-3">Dokter Pemeriksa</p>
+                            <div class="flex items-center space-x-3">
+                                @if ($letterRequest->photo_4x6_url)
+                                    <img src="{{ $letterRequest->photo_4x6_url }}" alt="Pas Foto"
+                                        class="w-14 h-18 object-cover rounded-lg border-2 border-indigo-400 flex-shrink-0">
+                                @endif
+                                <div>
+                                    <p class="font-bold text-sm">{{ $letterRequest->dokterPemeriksa->name }}</p>
+                                    <p class="text-[10px] text-slate-400">NRP: {{ $letterRequest->dokterPemeriksa->nrp ?? '-' }}</p>
+                                </div>
+                            </div>
                         </div>
                     @endif
                 </div>

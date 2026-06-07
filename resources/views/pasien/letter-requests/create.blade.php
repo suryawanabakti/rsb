@@ -26,6 +26,22 @@
             </div>
 
             <div class="mb-6">
+                <label for="photo_4x6" class="block text-sm font-bold text-slate-700 mb-2">Pas Foto 4x6
+                    (Wajib - Format JPG/PNG, Maks 2MB)</label>
+                <div class="relative border-2 border-dashed border-blue-300 rounded-xl p-8 text-center hover:bg-blue-50 transition-colors cursor-pointer bg-blue-50/30"
+                    onclick="document.getElementById('photo_4x6').click()">
+                    <input type="file" name="photo_4x6" id="photo_4x6" accept=".jpg,.jpeg,.png" required
+                        class="hidden" onchange="updatePhotoName(this)">
+                    <span class="text-3xl mb-2 block">📷</span>
+                    <p class="text-sm font-bold text-blue-600">Klik untuk upload pas foto 4x6</p>
+                    <p class="text-xs text-slate-400 mt-1" id="photo-name">Belum ada file dipilih</p>
+                </div>
+                @error('photo_4x6')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-6">
                 <label for="files" class="block text-sm font-bold text-slate-700 mb-2">Dokumen Pendukung
                     (Optional - PDF/Gambar)</label>
                 <div class="relative border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition-colors cursor-pointer"
@@ -50,6 +66,11 @@
                     const fileNames = Array.from(input.files).map(file => file.name).join(', ');
                     document.getElementById('file-names').textContent = fileNames ||
                         'Bisa upload lebih dari satu file (Maks 5MB/file)';
+                }
+
+                function updatePhotoName(input) {
+                    const name = input.files.length > 0 ? input.files[0].name : 'Belum ada file dipilih';
+                    document.getElementById('photo-name').textContent = name;
                 }
             </script>
 

@@ -210,11 +210,17 @@
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode($qrData) }}"
                             alt="Signature QR" class="w-full h-full opacity-80">
                     </div>
-                    <!-- Photo Placeholder -->
-                    <div
-                        class="absolute -left-20 top-0 w-16 h-20 border border-slate-400 bg-slate-50 flex items-center justify-center">
-                        <p class="text-[8px] text-slate-400">PAS PHOTO</p>
-                    </div>
+                    @if ($letterRequest->photo_4x6_url)
+                        <div class="absolute -left-24 top-0 w-20 h-28 border border-slate-400 bg-white flex items-center justify-center overflow-hidden shadow-sm">
+                            <img src="{{ $letterRequest->photo_4x6_url }}" alt="Pas Foto 4x6"
+                                class="w-full h-full object-cover">
+                        </div>
+                    @else
+                        <div
+                            class="absolute -left-20 top-0 w-16 h-20 border border-slate-400 bg-slate-50 flex items-center justify-center">
+                            <p class="text-[8px] text-slate-400">PAS PHOTO</p>
+                        </div>
+                    @endif
                 </div>
 
                 <p class="text-sm font-bold uppercase underline">

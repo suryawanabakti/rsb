@@ -23,6 +23,7 @@ class LetterRequest extends Model
         'admin_notes',
         'pemeriksaan_data',
         'final_letter',
+        'photo_4x6',
         'processed_at',
         'processed_by',
         'dokter_pemeriksa_id',
@@ -34,11 +35,16 @@ class LetterRequest extends Model
         'processed_at' => 'datetime',
     ];
 
-    protected $appends = ['final_letter_url'];
+    protected $appends = ['final_letter_url', 'photo_4x6_url'];
 
     public function getFinalLetterUrlAttribute()
     {
         return $this->final_letter ? asset('storage/' . $this->final_letter) : null;
+    }
+
+    public function getPhoto4x6UrlAttribute()
+    {
+        return $this->photo_4x6 ? asset('storage/' . $this->photo_4x6) : null;
     }
 
     public function patient()

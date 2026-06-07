@@ -12,11 +12,17 @@ class LetterRequestService
     public function createRequest(int $patientId, array $data): LetterRequest
     {
         return DB::transaction(function () use ($patientId, $data) {
+            $photoPath = null;
+            if (isset($data['photo_4x6'])) {
+                $photoPath = $data['photo_4x6']->store('photos-4x6', 'public');
+            }
+
             $letterRequest = LetterRequest::create([
                 'patient_id' => $patientId,
                 'letter_type_id' => $data['letter_type_id'],
                 'keperluan' => $data['keperluan'] ?? null,
                 'notes' => $data['notes'] ?? null,
+                'photo_4x6' => $photoPath,
                 'submission_date' => now(),
                 'status' => 'submitted',
             ]);
