@@ -1,13 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Api\LetterRequestController;
-use App\Http\Controllers\Api\LabResultController;
 use App\Http\Controllers\Api\DoctorScheduleController;
+use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\LabResultController;
+use App\Http\Controllers\Api\LetterRequestController;
+use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -56,5 +54,5 @@ Route::middleware('auth:sanctum')->group(function () {
         ->middleware('role:dokter');
 });
 
-// Download word - tanpa auth:sanctum, pakai token query param agar bisa buka di browser
+// Download word - tanpa auth:sanctum, pakai token  param agar bisa buka di browser
 Route::get('/requests/{id}/download-word', [LetterRequestController::class, 'downloadWord']);
