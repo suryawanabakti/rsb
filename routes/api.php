@@ -25,7 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [LetterRequestController::class, 'store']);
         Route::get('/types', [LetterRequestController::class, 'types']);
         Route::get('/{id}', [LetterRequestController::class, 'show']);
-        Route::get('/{id}/download-word', [LetterRequestController::class, 'downloadWord']);
     });
 
     // Notifications
@@ -56,3 +55,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/doctor-schedules', [DoctorScheduleController::class, 'index'])
         ->middleware('role:dokter');
 });
+
+// Download word - tanpa auth:sanctum, pakai token query param agar bisa buka di browser
+Route::get('/requests/{id}/download-word', [LetterRequestController::class, 'downloadWord']);

@@ -76,7 +76,18 @@ class LetterRequestController extends Controller
 
     public function downloadWord(Request $request, int $id)
     {
-        $patient = $request->user()->patient;
+        $token = $request->query('token');
+        if (!$token) {
+            return response()->json(['message' => 'Token tidak ditemukan'], 401);
+        }
+
+        $accessToken = \Laravel\Sanctum\PersonalAccessToken::findToken($token);
+        if (!$accessToken) {
+            return response()->json(['message' => 'Token tidak valid'], 401);
+        }
+
+        $user = $accessToken->tokenable;
+        $patient = $user->patient;
 
         if (!$patient) {
             return response()->json(['message' => 'Data pasien tidak ditemukan'], 404);
