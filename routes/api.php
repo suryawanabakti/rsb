@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [LetterRequestController::class, 'store']);
         Route::get('/types', [LetterRequestController::class, 'types']);
         Route::get('/{id}', [LetterRequestController::class, 'show']);
+        Route::get('/{id}/download-word', [LetterRequestController::class, 'downloadWord']);
     });
 
     // Notifications

@@ -25,7 +25,7 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: 65002
           script: |
-            cd /home/u903043711/domains/websiteku.site/public_html/rsb
+            cd /home/u903043711/domains/ourwebsite.site/public_html/rsb
             git pull origin main
             php artisan migrate --force
             php artisan optimize
