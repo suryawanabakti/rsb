@@ -20,7 +20,6 @@ use App\Http\Controllers\PetugasLab\LabResultController as PetugasLabLabResultCo
 use App\Http\Controllers\Pimpinan\DashboardController as PimpinanDashboardController;
 use App\Http\Controllers\Pimpinan\ReportController as PimpinanReportController;
 use App\Http\Controllers\ProfileController;
-use App\Models\LetterRequest;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

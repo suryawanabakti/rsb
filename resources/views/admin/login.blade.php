@@ -12,17 +12,32 @@
 
     body {
         font-family: 'Lexend', sans-serif;
+        background: url('{{ asset('images/bg.jpeg') }}') no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 0;
+    }
+
+    .login-wrapper {
+        position: relative;
+        z-index: 1;
     }
 </style>
 </head>
 
-<body class="bg-gray-50 flex items-center justify-center min-h-screen">
-    <div class="max-w-md w-full p-6">
+<body class="flex items-center justify-center min-h-screen">
+    <div class="login-wrapper max-w-md w-full p-6">
         <div class="text-center mb-8 flex flex-col items-center">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-24 h-24 mb-4 object-contain">
-            <h1 class="text-2xl font-extrabold text-blue-900 leading-tight">RS. BHAYANGKARA<br><span
+            <h1 class="text-2xl font-extrabold text-white leading-tight">RS. BHAYANGKARA<br><span
                     class="text-lg">MAKASSAR</span></h1>
-            <p class="text-gray-600 mt-2">Sistem Administrasi Surat</p>
+            <p class="text-white mt-2">Sistem Administrasi Surat</p>
         </div>
 
         <div class="bg-white rounded-2xl shadow-xl p-8">
