@@ -35,8 +35,7 @@
     <div class="login-wrapper max-w-md w-full p-6">
         <div class="text-center mb-8 flex flex-col items-center">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-24 h-24 mb-4 object-contain">
-            <h1 class="text-2xl font-extrabold text-white leading-tight">RS. BHAYANGKARA<br><span
-                    class="text-lg">MAKASSAR</span></h1>
+            <h1 class="text-2xl font-extrabold text-white leading-tight">RS. BHAYANGKARA MAKASSAR</h1>
             <p class="text-white mt-2">Sistem Administrasi Surat</p>
         </div>
 
