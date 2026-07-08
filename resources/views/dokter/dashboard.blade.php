@@ -9,7 +9,7 @@
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between mb-4">
                 <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">⏳</div>
@@ -28,56 +28,12 @@
             <p class="text-sm text-slate-500 mt-1">Divalidasi oleh Anda</p>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between mb-4">
-                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">🧪</div>
-                <span class="text-xs font-bold text-slate-400">TOTAL</span>
-            </div>
-            <h3 class="text-3xl font-black text-slate-900">{{ $stats['total_results'] }}</h3>
-            <p class="text-sm text-slate-500 mt-1">Total Hasil Lab</p>
-        </div>
+      
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-1 gap-8">
         <!-- Pending Results -->
-        <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
-                <h3 class="font-bold text-slate-900 text-lg">Menunggu Validasi</h3>
-                <a href="{{ route('dokter.lab-results.index', ['status' => 'pending']) }}"
-                    class="text-sm text-purple-600 font-semibold hover:underline">Lihat Semua</a>
-            </div>
-            <div class="divide-y divide-slate-100">
-                @forelse($pendingResults as $result)
-                    <a href="{{ route('dokter.lab-results.show', $result->id) }}"
-                        class="block p-6 hover:bg-slate-50 transition-colors">
-                        <div class="flex items-center">
-                            <div
-                                class="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mr-4 font-bold flex-shrink-0">
-                                🧪
-                            </div>
-                            <div class="flex-grow">
-                                <p class="font-bold text-slate-900">{{ $result->test_name }}</p>
-                                <p class="text-sm text-slate-500">
-                                    {{ $result->patient->user->name ?? '-' }} • Input oleh:
-                                    {{ $result->inputter->name ?? '-' }}
-                                </p>
-                            </div>
-                            <div class="text-right flex-shrink-0">
-                                <span
-                                    class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">
-                                    PENDING
-                                </span>
-                                <p class="text-xs text-slate-400 mt-1">{{ $result->created_at->diffForHumans() }}</p>
-                            </div>
-                        </div>
-                    </a>
-                @empty
-                    <div class="p-12 text-center text-slate-400 italic">
-                        🎉 Tidak ada hasil menunggu validasi.
-                    </div>
-                @endforelse
-            </div>
-        </div>
+     
 
         <!-- Today's Schedule -->
         <div class="space-y-6">

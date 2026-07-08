@@ -164,7 +164,7 @@
                 <p class="text-blue-100 text-lg mb-12">Gunakan aplikasi mobile kami untuk mendapatkan akses penuh ke
                     semua layanan surat menyurat rumah sakit secara instan.</p>
                 <div class="flex flex-wrap justify-center gap-4">
-                    <button
+                    <a href="{{ route('admin.login') }}"
                         class="px-10 py-5 bg-white text-blue-600 rounded-2xl font-black text-lg hover:scale-105 transition-transform shadow-lg">Portal
                         Pasien</button>
                     <a href="{{ route('admin.login') }}"
