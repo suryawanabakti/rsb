@@ -15,6 +15,7 @@ class StoreLetterRequest extends FormRequest
     {
         return [
             'letter_type_id' => 'required|exists:letter_types,id',
+            'photo_4x6' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'files' => 'nullable|array',
             'files.*' => 'file|max:5120', // Max 5MB per file
         ];

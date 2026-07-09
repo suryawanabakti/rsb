@@ -152,6 +152,7 @@
 
                     <div
                         class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                        @if ($letterRequest->letterType->slug == 'skbn')
                         <div class="md:col-span-2 flex items-start space-x-4">
                             <div class="flex-shrink-0">
                                 <label class="block text-xs font-black text-indigo-400 uppercase tracking-widest mb-2">Pas Foto 4x6</label>
@@ -174,6 +175,7 @@
                                 @enderror
                             </div>
                         </div>
+                        @endif
                         <div>
                             <label class="block text-xs font-black text-indigo-400 uppercase tracking-widest mb-2">Pilih
                                 Dokter Pemeriksa (Tanda Tangan)</label>

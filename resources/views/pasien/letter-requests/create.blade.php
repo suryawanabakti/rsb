@@ -20,12 +20,12 @@
                     class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none transition-all appearance-none cursor-pointer bg-white">
                     <option value="" disabled selected>Pilih jenis surat...</option>
                     @foreach ($letterTypes as $type)
-                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                        <option value="{{ $type->id }}" data-slug="{{ $type->slug }}">{{ $type->name }}</option>
                     @endforeach
                 </select>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-6" id="photo-section" style="display: none;">
                 <label for="photo_4x6" class="block text-sm font-bold text-slate-700 mb-2">Pas Foto 4x6
                     (Wajib - Format JPG/PNG, Maks 2MB)</label>
                 <div class="relative border-2 border-dashed border-blue-300 rounded-xl p-8 text-center hover:bg-blue-50 transition-colors cursor-pointer bg-blue-50/30"
@@ -62,6 +62,20 @@
             </div>
 
             <script>
+                document.getElementById('letter_type_id').addEventListener('change', function() {
+                    const selected = this.options[this.selectedIndex];
+                    const slug = selected.dataset.slug;
+                    const photoSection = document.getElementById('photo-section');
+                    const photoInput = document.getElementById('photo_4x6');
+                    if (slug === 'skbn') {
+                        photoSection.style.display = 'block';
+                        photoInput.required = true;
+                    } else {
+                        photoSection.style.display = 'none';
+                        photoInput.required = false;
+                    }
+                });
+
                 function updateFileNames(input) {
                     const fileNames = Array.from(input.files).map(file => file.name).join(', ');
                     document.getElementById('file-names').textContent = fileNames ||

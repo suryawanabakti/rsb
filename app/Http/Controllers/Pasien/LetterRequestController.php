@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Pasien\StoreLetterRequest;
 use App\Models\LetterType;
 use App\Services\LetterRequestService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -112,5 +113,32 @@ class LetterRequestController extends Controller
 
         $objWriter->save('php://output');
         exit;
+    }
+
+    public function downloadPdf($id)
+    {
+        $patient = Auth::user()->patient;
+        $letterRequest = $this->letterRequestService->getRequestDetails($id, $patient->id);
+
+        if (!$letterRequest) {
+            abort(404);
+        }
+
+        $letterRequest->load(['patient.user', 'letterType', 'dokterPemeriksa']);
+
+        $labResults = \App\Models\LabResult::where('letter_request_id', $letterRequest->id)
+            ->orWhere('patient_id', $letterRequest->patient_id)
+            ->with('validator')
+            ->latest()
+            ->first();
+
+        $slug = $letterRequest->letterType->slug;
+        $view = $slug === 'skbn' ? 'pasien.letter-requests.pdf.skbn' : 'pasien.letter-requests.pdf.skbj';
+
+        $pdf = Pdf::loadView($view, compact('letterRequest', 'labResults'));
+
+        $fileName = 'Surat_' . strtoupper($slug) . '_' . str_replace(' ', '_', $letterRequest->patient->user->name) . '.pdf';
+
+        return $pdf->stream($fileName);
     }
 }

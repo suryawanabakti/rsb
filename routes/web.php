@@ -121,6 +121,7 @@ Route::prefix('pasien')->name('pasien.')->middleware(['auth', 'role:pasien'])->g
         Route::post('/', [PasienLetterRequestController::class, 'store'])->name('store');
         Route::get('/{letterRequest}', [PasienLetterRequestController::class, 'show'])->name('show');
         Route::get('/{letterRequest}/download-word', [PasienLetterRequestController::class, 'downloadWord'])->name('download-word');
+        Route::get('/{letterRequest}/download-pdf', [PasienLetterRequestController::class, 'downloadPdf'])->name('download-pdf');
     });
 
     Route::prefix('notifications')->name('notifications.')->group(function () {
