@@ -94,11 +94,7 @@
                 <div class="bg-indigo-600 rounded-2xl shadow-lg p-6 text-white">
                     <h3 class="font-bold text-lg mb-2">Unduh Surat</h3>
                     <p class="text-indigo-100 text-sm mb-6">Surat Anda telah selesai diproses. Silakan unduh dokumen.</p>
-                    <a href="{{ route('pasien.letter-requests.download-word', $letterRequest->id) }}"
-                        class="flex items-center justify-center space-x-2 w-full bg-white text-indigo-600 font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-50 transition-all text-sm uppercase tracking-widest mb-3">
-                        <span>📥</span>
-                        <span>Unduh Word</span>
-                    </a>
+                   
                     <a href="{{ route('pasien.letter-requests.download-pdf', $letterRequest->id) }}"
                         class="flex items-center justify-center space-x-2 w-full bg-white text-indigo-600 font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-50 transition-all text-sm uppercase tracking-widest">
                         <span>📄</span>
