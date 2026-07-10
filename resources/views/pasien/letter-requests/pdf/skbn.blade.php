@@ -112,30 +112,17 @@
             margin-top: 10px;
         }
         .footer-table td {
-            vertical-align: top;
+            vertical-align: middle;
         }
         .footer-left {
-            width: 60%;
+            width: 45%;
+            text-align: right;
         }
         .footer-right {
             text-align: center;
-            width: 40%;
+            width: 55%;
         }
-        .media-row-table {
-            margin: 8px auto;
-        }
-        .media-row-table td {
-            vertical-align: middle;
-            padding: 0 4px;
-        }
-        .photo-cell {
-            width: 75px;
-            text-align: center;
-        }
-        .qr-cell {
-            width: 85px;
-            text-align: center;
-        }
+
         .bold { font-weight: bold; }
         .italic { font-style: italic; }
         .underline { text-decoration: underline; }
@@ -293,32 +280,23 @@
 
     <table class="footer-table" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="footer-left">&nbsp;</td>
+            <td class="footer-left">
+                @if($photoSrc)
+                    <img src="{{ $photoSrc }}" alt="Pas Foto" style="width:70px;height:90px;border:1px solid #94a3b8;">
+                @else
+                    <div style="display:inline-block; width:70px;height:90px;border:1px solid #94a3b8;background:#f1f5f9;line-height:90px;text-align:center;">
+                        <span style="font-size:7pt;color:#94a3b8;">PAS FOTO</span>
+                    </div>
+                @endif
+            </td>
             <td class="footer-right">
                 <div class="small">Makassar, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</div>
                 <div class="small bold" style="margin-top:2px;">Dokter Pemeriksa</div>
 
-                {{-- Foto + QR Code berdampingan --}}
-                <table class="media-row-table" cellspacing="0" cellpadding="0">
-                    <tr>
-                        {{-- Foto Pasien --}}
-                        <td class="photo-cell">
-                            @if($photoSrc)
-                                <img src="{{ $photoSrc }}" alt="Pas Foto" style="width:70px;height:90px;border:1px solid #94a3b8;">
-                            @else
-                                <div style="width:70px;height:90px;border:1px solid #94a3b8;background:#f1f5f9;line-height:90px;text-align:center;">
-                                    <span style="font-size:7pt;color:#94a3b8;">PAS FOTO</span>
-                                </div>
-                            @endif
-                        </td>
-                        {{-- QR Code --}}
-                        <td class="qr-cell">
-                            @if($qrSrc)
-                                <img src="{{ $qrSrc }}" alt="QR Code" style="width:80px;height:80px;">
-                            @endif
-                        </td>
-                    </tr>
-                </table>
+                {{-- QR Code --}}
+                @if($qrSrc)
+                    <img src="{{ $qrSrc }}" alt="QR Code" style="width:80px;height:80px;">
+                @endif
 
                 {{-- Nama & NRP Dokter --}}
                 <div class="small bold underline" style="margin-top:6px; margin-right:6px">
