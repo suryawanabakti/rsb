@@ -319,10 +319,10 @@
                     </tr>
                 </table>
 
-                <div class="small bold underline uppercase" style="margin-top:6px;">
+                <div class="small bold underline" style="margin-top:6px;  margin-right:6px">
                     {{ $letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes' }}
                 </div>
-                <div class="small bold uppercase">
+                <div class="small bold">
                     AKBP NRP {{ $letterRequest->dokterPemeriksa->nrp ?? '74030679' }}
                 </div>
             </td>

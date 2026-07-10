@@ -8,7 +8,21 @@
             class="text-blue-600 font-semibold text-sm hover:underline flex items-center mb-2">
             ← Kembali ke Daftar Pasien
         </a>
-        <h1 class="text-2xl font-bold text-slate-900">Detail Pasien</h1>
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900">Detail Pasien</h1>
+            </div>
+            <div class="flex gap-3">
+                <a href="{{ route('admin.patients.edit', $patient->id) }}"
+                    class="bg-amber-500 text-white px-5 py-2 rounded-xl font-bold text-sm hover:bg-amber-600 transition-colors flex items-center">
+                    Edit Pasien
+                </a>
+                <a href="{{ route('admin.patients.change-password', $patient->id) }}"
+                    class="bg-blue-600 text-white px-5 py-2 rounded-xl font-bold text-sm hover:bg-blue-700 transition-colors flex items-center">
+                    Ubah Password
+                </a>
+            </div>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

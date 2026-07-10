@@ -321,7 +321,7 @@
                 </table>
 
                 {{-- Nama & NRP Dokter --}}
-                <div class="small bold underline uppercase" style="margin-top:6px;">
+                <div class="small bold underline" style="margin-top:6px; margin-right:6px">
                     {{ $letterRequest->dokterPemeriksa->name ?? 'Dr. dr. IRWAN, Sp.OG., M.Kes' }}
                 </div>
                 <div class="small bold">

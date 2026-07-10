@@ -61,7 +61,9 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <a href="{{ route('admin.patients.show', $patient->id) }}"
-                                    class="text-blue-600 font-bold text-xs hover:underline">Detail</a>
+                                    class="text-blue-600 font-bold text-xs hover:underline mr-3">Detail</a>
+                                <a href="{{ route('admin.patients.edit', $patient->id) }}"
+                                    class="text-amber-600 font-bold text-xs hover:underline">Edit</a>
                             </td>
                         </tr>
                     @empty

@@ -70,6 +70,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::prefix('patients')->name('patients.')->group(function () {
                 Route::get('/', [PatientController::class, 'index'])->name('index');
                 Route::get('/{patient}', [PatientController::class, 'show'])->name('show');
+                Route::get('/{patient}/edit', [PatientController::class, 'edit'])->name('edit');
+                Route::put('/{patient}', [PatientController::class, 'update'])->name('update');
+                Route::get('/{patient}/change-password', [PatientController::class, 'changePassword'])->name('change-password');
+                Route::put('/{patient}/password', [PatientController::class, 'updatePassword'])->name('update-password');
                 Route::patch('/{patient}/extra-info', [PatientController::class, 'updateExtraInfo'])->name('update-extra-info');
             });
 
