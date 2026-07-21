@@ -41,10 +41,21 @@ class LetterRequestController extends Controller
 
     public function updateStatus(Request $request, LetterRequest $letterRequest)
     {
-        $request->validate([
-            'status' => 'required|in:verified,approved,rejected,completed',
-            'admin_notes' => 'nullable|string',
-        ]);
+        $role = auth()->user()->role;
+
+        if ($role === 'admin') {
+            $request->validate([
+                'status' => 'required|in:submitted,verified',
+                'admin_notes' => 'nullable|string',
+            ]);
+        } elseif ($role === 'dokter') {
+            $request->validate([
+                'status' => 'required|in:approved,rejected',
+                'admin_notes' => 'nullable|string',
+            ]);
+        } else {
+            abort(403);
+        }
 
         $letterRequest->update([
             'status' => $request->status,

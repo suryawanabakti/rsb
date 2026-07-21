@@ -13,7 +13,7 @@ class PimpinanSeeder extends Seeder
     public function run(): void
     {
         // Avoid duplicate username pimpinan
-        if (!User::where('username', 'pimpinan')->exists()) {
+        if (! User::where('username', 'pimpinan')->exists()) {
             User::create([
                 'name' => 'Bapak Pimpinan',
                 'username' => 'pimpinan',

@@ -14,7 +14,7 @@ class AdminSeeder extends Seeder
     {
         User::create([
             'name' => 'Administrator',
-            'username' => 'admin',
+            'username' => 'di ',
             'password' => 'password', // Hash is handled by model attribute
             'phone' => '000000000000',
             'role' => 'admin',

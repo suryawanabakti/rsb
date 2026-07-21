@@ -306,7 +306,7 @@
         <!-- Actions Sidebar -->
         <div class="space-y-6">
             <!-- Print Button Section -->
-
+            @if (in_array($letterRequest->status, ['approved', 'completed']))
             <div class="bg-indigo-600 rounded-2xl shadow-xl p-6 text-white">
                 <h3 class="font-bold text-lg mb-4">Cetak Surat Resmi</h3>
                 <p class="text-indigo-100 text-sm mb-6">Gunakan format profesional untuk mencetak surat ini langsung
@@ -332,10 +332,17 @@
                     </button>
                 @endif
             </div>
+            @endif
 
 
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <h3 class="font-bold text-slate-900 text-lg mb-4">Aksi Admin</h3>
+                <h3 class="font-bold text-slate-900 text-lg mb-4">
+                    @if (auth()->user()->role === 'admin')
+                        Aksi Admin
+                    @else
+                        Aksi Dokter
+                    @endif
+                </h3>
                 <form action="{{ route('admin.letter-requests.update-status', $letterRequest->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
@@ -344,17 +351,28 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Update Status</label>
                         <select name="status"
                             class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 outline-none transition-all">
-                            <option value="verified" {{ $letterRequest->status == 'verified' ? 'selected' : '' }}>
-                                Verifikasi Berkas</option>
-                            <option value="approved" {{ $letterRequest->status == 'approved' ? 'selected' : '' }}>Setujui
-                                (Diproses)</option>
-                            <option value="rejected" {{ $letterRequest->status == 'rejected' ? 'selected' : '' }}>Tolak
-                                Permohonan</option>
+                            @if (auth()->user()->role === 'admin')
+                                <option value="submitted" {{ $letterRequest->status == 'submitted' ? 'selected' : '' }}>
+                                    Submitted (Diajukan)</option>
+                                <option value="verified" {{ $letterRequest->status == 'verified' ? 'selected' : '' }}>
+                                    Verifikasi Berkas</option>
+                            @else
+                                <option value="approved" {{ $letterRequest->status == 'approved' ? 'selected' : '' }}>Setujui
+                                    (Diproses)</option>
+                                <option value="rejected" {{ $letterRequest->status == 'rejected' ? 'selected' : '' }}>Tolak
+                                    Permohonan</option>
+                            @endif
                         </select>
                     </div>
 
                     <div class="mb-6">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Catatan Admin</label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            @if (auth()->user()->role === 'admin')
+                                Catatan Admin
+                            @else
+                                Catatan Dokter
+                            @endif
+                        </label>
                         <textarea name="admin_notes" rows="4"
                             class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 outline-none transition-all text-sm"
                             placeholder="Contoh: Berkas kurang lengkap, silakan upload ulang.">{{ $letterRequest->admin_notes }}</textarea>
